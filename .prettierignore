@@ -1,0 +1,17 @@
+# Build outputs
+build/
+android/app/build/
+android/app/.cxx/
+ios/build/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Generated
+*.lock
+coverage/
+
+# Native
+ios/Pods/
+android/.gradle/
