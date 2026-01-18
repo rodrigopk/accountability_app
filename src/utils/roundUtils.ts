@@ -1,12 +1,23 @@
 import { RoundProgressSummary } from '../services/types';
 
 /**
+ * Parses a date string as local time to avoid timezone issues.
+ * Handles both YYYY-MM-DD format and full ISO strings (e.g., 2026-01-18T10:30:00.000Z)
+ */
+function parseDateAsLocal(dateString: string): Date {
+  // Extract just the date portion if it's a full ISO string
+  const datePart = dateString.includes('T') ? dateString.split('T')[0] : dateString;
+  const [year, month, day] = datePart.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/**
  * Formats a date range from startDate to endDate
  * Example: "Jan 1 - Jan 31, 2026"
  */
 export function formatDateRange(startDate: string, endDate: string): string {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
+  const start = parseDateAsLocal(startDate);
+  const end = parseDateAsLocal(endDate);
 
   const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
   const startDay = start.getDate();
@@ -32,9 +43,7 @@ export function formatDateRange(startDate: string, endDate: string): string {
  * Calculates overall completion percentage from progress summary
  * Returns average of all goal completion percentages
  */
-export function calculateOverallProgress(
-  progressSummary: RoundProgressSummary | null,
-): number {
+export function calculateOverallProgress(progressSummary: RoundProgressSummary | null): number {
   if (!progressSummary || progressSummary.goalSummaries.length === 0) {
     return 0;
   }

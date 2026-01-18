@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react-native';
 
+import { useActiveRounds } from '../../providers/ActiveRoundsProvider';
 import { ActiveRoundsScreen } from '../ActiveRoundsScreen';
 
 // Mock the provider hook
@@ -7,7 +8,13 @@ jest.mock('../../providers/ActiveRoundsProvider', () => ({
   useActiveRounds: jest.fn(),
 }));
 
-import { useActiveRounds } from '../../providers/ActiveRoundsProvider';
+// Mock react-navigation
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    addListener: jest.fn(() => jest.fn()),
+  }),
+}));
 
 describe('ActiveRoundsScreen', () => {
   afterEach(() => {

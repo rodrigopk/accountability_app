@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 
-import { AccountabilityRound } from '../../types/AccountabilityRound';
 import { RoundProgressSummary } from '../../services/types';
+import { AccountabilityRound } from '../../types/AccountabilityRound';
 import { RoundCard } from '../RoundCard';
 
 describe('RoundCard', () => {

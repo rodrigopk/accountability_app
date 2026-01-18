@@ -1,0 +1,15 @@
+/**
+ * Time constants in milliseconds
+ */
+export const MILLISECONDS_PER_SECOND = 1000;
+export const MILLISECONDS_PER_MINUTE = 60 * MILLISECONDS_PER_SECOND;
+export const MILLISECONDS_PER_HOUR = 60 * MILLISECONDS_PER_MINUTE;
+export const MILLISECONDS_PER_DAY = 24 * MILLISECONDS_PER_HOUR;
+export const MILLISECONDS_PER_WEEK = 7 * MILLISECONDS_PER_DAY;
+
+/**
+ * Time constants in seconds
+ */
+export const SECONDS_PER_MINUTE = 60;
+export const SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE;
+export const SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;

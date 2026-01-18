@@ -1,26 +1,40 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { useActiveRounds } from '../providers/ActiveRoundsProvider';
-import { RoundCard } from '../components/RoundCard';
 import { EmptyState } from '../components/EmptyState';
+import { RoundCard } from '../components/RoundCard';
+import { RootStackParamList } from '../navigation/types';
+import { useActiveRounds } from '../providers/ActiveRoundsProvider';
+
+type ActiveRoundsNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
 /**
  * Screen component displaying all active accountability rounds
  */
 export function ActiveRoundsScreen() {
+  const navigation = useNavigation<ActiveRoundsNavigationProp>();
   const { rounds, progressSummaries, loading, error, refresh } = useActiveRounds();
 
   const handleCreatePress = () => {
-    // Placeholder for future implementation
-    console.log('Create round pressed');
+    navigation.navigate('CreateRoundWizard');
   };
+
+  // Refresh when returning from wizard
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refresh();
+    });
+    return unsubscribe;
+  }, [navigation, refresh]);
 
   if (loading) {
     return (
@@ -50,16 +64,16 @@ export function ActiveRoundsScreen() {
     <View style={styles.container}>
       <FlatList
         data={rounds}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <RoundCard
-            round={item}
-            progressSummary={progressSummaries.get(item.id) || null}
-          />
+          <RoundCard round={item} progressSummary={progressSummaries.get(item.id) || null} />
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
+      <TouchableOpacity style={styles.fab} onPress={handleCreatePress}>
+        <Text style={styles.fabIcon}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -89,5 +103,26 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     textAlign: 'center',
     textDecorationLine: 'underline',
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  fabIcon: {
+    fontSize: 32,
+    color: '#fff',
+    fontWeight: '300',
   },
 });

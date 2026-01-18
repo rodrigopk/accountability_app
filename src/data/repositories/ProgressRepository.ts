@@ -19,7 +19,7 @@ export class ProgressRepository extends BaseIndexedRepository<GoalProgress> {
   protected readonly secondaryIndexes: SecondaryIndexConfig<GoalProgress>[] = [
     {
       prefix: PROGRESS_BY_ROUND_PREFIX,
-      getKey: (progress) => progress.roundId,
+      getKey: progress => progress.roundId,
     },
   ];
 
@@ -60,7 +60,7 @@ export class ProgressRepository extends BaseIndexedRepository<GoalProgress> {
    */
   async getProgressForGoal(roundId: string, goalId: string): Promise<GoalProgress[]> {
     const progressList = await this.getProgressForRound(roundId);
-    return progressList.filter((progress) => progress.goalId === goalId);
+    return progressList.filter(progress => progress.goalId === goalId);
   }
 
   /**

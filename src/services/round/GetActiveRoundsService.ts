@@ -20,9 +20,13 @@ export class GetActiveRoundsService {
    */
   async execute(deviceId: string): Promise<AccountabilityRound[]> {
     const allRounds = await this.repository.getRoundsByDevice(deviceId);
-    const now = new Date().toISOString();
+    // Get today's date in YYYY-MM-DD format for proper comparison with endDate
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+      now.getDate(),
+    ).padStart(2, '0')}`;
 
     // Filter to only return rounds that haven't ended
-    return allRounds.filter((round) => round.endDate >= now);
+    return allRounds.filter(round => round.endDate >= today);
   }
 }

@@ -20,7 +20,8 @@ describe('DeleteRoundService', () => {
     expect(mockRoundRepository.deleteRound).toHaveBeenCalledWith('round-1');
 
     // Verify progress was deleted before round
-    const progressCallOrder = mockProgressRepository.deleteProgressForRound.mock.invocationCallOrder[0];
+    const progressCallOrder =
+      mockProgressRepository.deleteProgressForRound.mock.invocationCallOrder[0];
     const roundCallOrder = mockRoundRepository.deleteRound.mock.invocationCallOrder[0];
     expect(progressCallOrder).toBeLessThan(roundCallOrder);
   });
@@ -65,7 +66,9 @@ describe('DeleteRoundService', () => {
 
     await service.execute('round-with-no-progress');
 
-    expect(mockProgressRepository.deleteProgressForRound).toHaveBeenCalledWith('round-with-no-progress');
+    expect(mockProgressRepository.deleteProgressForRound).toHaveBeenCalledWith(
+      'round-with-no-progress',
+    );
     expect(mockRoundRepository.deleteRound).toHaveBeenCalledWith('round-with-no-progress');
   });
 });

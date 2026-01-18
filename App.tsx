@@ -1,18 +1,20 @@
+import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 
-import { DeviceInfoProvider } from './src/providers/DeviceInfoProvider';
+import { RootNavigator } from './src/navigation/RootNavigator';
 import { ActiveRoundsProvider } from './src/providers/ActiveRoundsProvider';
-import { ActiveRoundsScreen } from './src/screens/ActiveRoundsScreen';
+import { DeviceInfoProvider } from './src/providers/DeviceInfoProvider';
 
 function App() {
   return (
-    <DeviceInfoProvider>
-      <ActiveRoundsProvider>
-        <ActiveRoundsScreen />
-      </ActiveRoundsProvider>
-    </DeviceInfoProvider>
+    <NavigationContainer>
+      <DeviceInfoProvider>
+        <ActiveRoundsProvider>
+          <RootNavigator />
+        </ActiveRoundsProvider>
+      </DeviceInfoProvider>
+    </NavigationContainer>
   );
 }
-
 
 export default App;

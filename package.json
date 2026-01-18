@@ -15,11 +15,17 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-community/datetimepicker": "^8.6.0",
     "@react-native/new-app-screen": "0.83.1",
+    "@react-navigation/native": "^7.1.28",
+    "@react-navigation/stack": "^7.6.15",
     "react": "19.2.0",
     "react-native": "0.83.1",
     "react-native-device-info": "^15.0.1",
+    "react-native-gesture-handler": "^2.30.0",
+    "react-native-get-random-values": "^2.0.0",
     "react-native-safe-area-context": "^5.5.2",
+    "react-native-screens": "^4.19.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
@@ -33,6 +39,7 @@
     "@react-native/eslint-config": "0.83.1",
     "@react-native/metro-config": "0.83.1",
     "@react-native/typescript-config": "0.83.1",
+    "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",

@@ -137,9 +137,7 @@ describe('StorageAdapter', () => {
     it('should throw on error', async () => {
       (AsyncStorage.multiSet as jest.Mock).mockRejectedValue(new Error('Storage error'));
 
-      await expect(
-        adapter.multiSet([['key', 'value']]),
-      ).rejects.toThrow('Storage error');
+      await expect(adapter.multiSet([['key', 'value']])).rejects.toThrow('Storage error');
     });
   });
 

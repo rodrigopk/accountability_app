@@ -19,7 +19,7 @@ export class RoundRepository extends BaseIndexedRepository<AccountabilityRound> 
   protected readonly secondaryIndexes: SecondaryIndexConfig<AccountabilityRound>[] = [
     {
       prefix: ROUNDS_BY_DEVICE_PREFIX,
-      getKey: (round) => round.deviceId,
+      getKey: round => round.deviceId,
     },
   ];
 
@@ -70,7 +70,7 @@ export class RoundRepository extends BaseIndexedRepository<AccountabilityRound> 
 
     // Find the most recent round that hasn't ended
     const activeRounds = rounds
-      .filter((round) => round.endDate >= now)
+      .filter(round => round.endDate >= now)
       .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
 
     return activeRounds.length > 0 ? activeRounds[0] : null;

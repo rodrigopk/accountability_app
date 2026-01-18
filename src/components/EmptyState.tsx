@@ -13,9 +13,7 @@ export function EmptyState({ onCreatePress }: EmptyStateProps) {
     <View style={styles.container}>
       <Text style={styles.icon}>📋</Text>
       <Text style={styles.title}>No active accountability rounds</Text>
-      <Text style={styles.message}>
-        Create your first round to start tracking your goals
-      </Text>
+      <Text style={styles.message}>Create your first round to start tracking your goals</Text>
       <TouchableOpacity style={styles.button} onPress={onCreatePress}>
         <Text style={styles.buttonText}>Create Round</Text>
       </TouchableOpacity>

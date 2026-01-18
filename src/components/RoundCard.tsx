@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-import { AccountabilityRound } from '../types/AccountabilityRound';
 import { RoundProgressSummary } from '../services/types';
+import { AccountabilityRound } from '../types/AccountabilityRound';
 import { formatDateRange, calculateOverallProgress } from '../utils/roundUtils';
 
 import { styles } from './RoundCard.styles';
@@ -19,7 +19,7 @@ export function RoundCard({ round, progressSummary }: RoundCardProps) {
   const title = round.reward || 'Accountability Round';
   const dateRange = formatDateRange(round.startDate, round.endDate);
   const overallProgress = calculateOverallProgress(progressSummary);
-  const goalTitles = round.goals.map((goal) => goal.title).join(', ');
+  const goalTitles = round.goals.map(goal => goal.title).join(', ');
 
   return (
     <View style={styles.card}>
@@ -29,9 +29,7 @@ export function RoundCard({ round, progressSummary }: RoundCardProps) {
       {progressSummary && (
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-            <View
-              style={[styles.progressFill, { width: `${overallProgress}%` }]}
-            />
+            <View style={[styles.progressFill, { width: `${overallProgress}%` }]} />
           </View>
           <Text style={styles.progressText}>{overallProgress}%</Text>
         </View>

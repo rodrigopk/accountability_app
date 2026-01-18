@@ -68,17 +68,13 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
   /**
    * Build index entries for adding an entity
    */
-  private async buildAddIndexEntries(
-    entity: T,
-  ): Promise<[string, string[]][]> {
+  private async buildAddIndexEntries(entity: T): Promise<[string, string[]][]> {
     const indexKeys = [
       this.primaryIndexKey,
-      ...this.secondaryIndexes.map((idx) =>
-        this.secondaryIndexKey(idx.prefix, idx.getKey(entity)),
-      ),
+      ...this.secondaryIndexes.map(idx => this.secondaryIndexKey(idx.prefix, idx.getKey(entity))),
     ];
 
-    const indexes = await Promise.all(indexKeys.map((key) => this.getIndex(key)));
+    const indexes = await Promise.all(indexKeys.map(key => this.getIndex(key)));
 
     return indexKeys.map((key, i) => [key, [...indexes[i], entity.id]]);
   }
@@ -86,19 +82,15 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
   /**
    * Build index entries for removing an entity
    */
-  private async buildRemoveIndexEntries(
-    entity: T,
-  ): Promise<[string, string[]][]> {
+  private async buildRemoveIndexEntries(entity: T): Promise<[string, string[]][]> {
     const indexKeys = [
       this.primaryIndexKey,
-      ...this.secondaryIndexes.map((idx) =>
-        this.secondaryIndexKey(idx.prefix, idx.getKey(entity)),
-      ),
+      ...this.secondaryIndexes.map(idx => this.secondaryIndexKey(idx.prefix, idx.getKey(entity))),
     ];
 
-    const indexes = await Promise.all(indexKeys.map((key) => this.getIndex(key)));
+    const indexes = await Promise.all(indexKeys.map(key => this.getIndex(key)));
 
-    return indexKeys.map((key, i) => [key, indexes[i].filter((id) => id !== entity.id)]);
+    return indexKeys.map((key, i) => [key, indexes[i].filter(id => id !== entity.id)]);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -132,7 +124,7 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
       return [];
     }
 
-    const keys = ids.map((id) => this.entityKey(id));
+    const keys = ids.map(id => this.entityKey(id));
     const entities = await this.storage.multiGet<T>(keys);
 
     return entities.filter((e): e is T => e !== null);
@@ -141,10 +133,7 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
   /**
    * Get all entities matching a secondary index
    */
-  protected async getBySecondaryIndex(
-    indexPrefix: string,
-    groupKey: string,
-  ): Promise<T[]> {
+  protected async getBySecondaryIndex(indexPrefix: string, groupKey: string): Promise<T[]> {
     const indexKey = this.secondaryIndexKey(indexPrefix, groupKey);
     const ids = await this.getIndex(indexKey);
     return this.getByIds(ids);
@@ -192,10 +181,7 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
   /**
    * Delete multiple entities by a secondary index key and clean up indexes
    */
-  protected async deleteBySecondaryIndex(
-    indexPrefix: string,
-    groupKey: string,
-  ): Promise<void> {
+  protected async deleteBySecondaryIndex(indexPrefix: string, groupKey: string): Promise<void> {
     const indexKey = this.secondaryIndexKey(indexPrefix, groupKey);
     const ids = await this.getIndex(indexKey);
 
@@ -212,7 +198,7 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
 
     // Build updated indexes
     const indexUpdates: [string, string[]][] = [
-      [this.primaryIndexKey, primaryIndex.filter((id) => !idsToRemove.has(id))],
+      [this.primaryIndexKey, primaryIndex.filter(id => !idsToRemove.has(id))],
       [indexKey, []], // Clear the secondary index we're deleting by
     ];
 
@@ -235,12 +221,12 @@ export abstract class BaseIndexedRepository<T extends { id: string }> {
 
       // Remove deleted IDs from each group
       for (const [secKey, currentIds] of groupedIds) {
-        indexUpdates.push([secKey, currentIds.filter((id) => !idsToRemove.has(id))]);
+        indexUpdates.push([secKey, currentIds.filter(id => !idsToRemove.has(id))]);
       }
     }
 
     await Promise.all([
-      this.storage.multiDelete(ids.map((id) => this.entityKey(id))),
+      this.storage.multiDelete(ids.map(id => this.entityKey(id))),
       this.storage.multiSet(indexUpdates),
     ]);
   }

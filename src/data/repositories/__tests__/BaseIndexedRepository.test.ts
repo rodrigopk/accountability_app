@@ -15,7 +15,7 @@ class TestRepository extends BaseIndexedRepository<TestEntity> {
   protected readonly secondaryIndexes: SecondaryIndexConfig<TestEntity>[] = [
     {
       prefix: 'test_by_group_',
-      getKey: (entity) => entity.groupKey,
+      getKey: entity => entity.groupKey,
     },
   ];
 
@@ -45,7 +45,6 @@ describe('BaseIndexedRepository', () => {
   let repository: TestRepository;
   let mocks: MockStorageAdapter;
   let mockGet: jest.Mock;
-  let mockSet: jest.Mock;
   let mockDelete: jest.Mock;
   let mockMultiGet: jest.Mock;
   let mockMultiSet: jest.Mock;
@@ -53,7 +52,7 @@ describe('BaseIndexedRepository', () => {
 
   beforeEach(() => {
     mocks = createMockStorageAdapter();
-    ({ mockGet, mockSet, mockDelete, mockMultiGet, mockMultiSet, mockMultiDelete } = mocks);
+    ({ mockGet, mockDelete, mockMultiGet, mockMultiSet, mockMultiDelete } = mocks);
 
     repository = new TestRepository(mocks.storage);
   });

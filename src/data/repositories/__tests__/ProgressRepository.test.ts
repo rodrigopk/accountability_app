@@ -6,7 +6,6 @@ describe('ProgressRepository', () => {
   let repository: ProgressRepository;
   let mocks: MockStorageAdapter;
   let mockGet: jest.Mock;
-  let mockSet: jest.Mock;
   let mockDelete: jest.Mock;
   let mockMultiGet: jest.Mock;
   let mockMultiSet: jest.Mock;
@@ -14,7 +13,7 @@ describe('ProgressRepository', () => {
 
   beforeEach(() => {
     mocks = createMockStorageAdapter();
-    ({ mockGet, mockSet, mockDelete, mockMultiGet, mockMultiSet, mockMultiDelete } = mocks);
+    ({ mockGet, mockDelete, mockMultiGet, mockMultiSet, mockMultiDelete } = mocks);
 
     repository = new ProgressRepository(mocks.storage);
   });
@@ -231,8 +230,10 @@ describe('ProgressRepository', () => {
       };
 
       mockGet.mockImplementation((key: string) => {
-        if (key === 'progress_by_round_round-123') return Promise.resolve(['progress-1', 'progress-2']);
-        if (key === 'progress_index') return Promise.resolve(['progress-1', 'progress-2', 'progress-3']);
+        if (key === 'progress_by_round_round-123')
+          return Promise.resolve(['progress-1', 'progress-2']);
+        if (key === 'progress_index')
+          return Promise.resolve(['progress-1', 'progress-2', 'progress-3']);
         return Promise.resolve([]);
       });
       mockMultiGet.mockResolvedValue([progress1, progress2]);

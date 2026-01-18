@@ -22,6 +22,16 @@ describe('roundUtils', () => {
       const result = formatDateRange('2026-01-15', '2026-01-15');
       expect(result).toBe('Jan 15 - 15, 2026');
     });
+
+    it('handles full ISO string format', () => {
+      const result = formatDateRange('2026-01-01T10:30:00.000Z', '2026-01-31T23:59:59.000Z');
+      expect(result).toBe('Jan 1 - 31, 2026');
+    });
+
+    it('handles mixed formats (ISO and date-only)', () => {
+      const result = formatDateRange('2026-01-01T00:00:00.000Z', '2026-02-15');
+      expect(result).toBe('Jan 1 - Feb 15, 2026');
+    });
   });
 
   describe('calculateOverallProgress', () => {

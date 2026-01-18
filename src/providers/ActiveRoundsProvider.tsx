@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
-import { StorageAdapter } from '../data/storage/StorageAdapter';
-import { GetActiveRoundsService } from '../services/round/GetActiveRoundsService';
 import { GetProgressSummaryService } from '../services/progress/GetProgressSummaryService';
-import { AccountabilityRound } from '../types/AccountabilityRound';
+import { GetActiveRoundsService } from '../services/round/GetActiveRoundsService';
 import { RoundProgressSummary } from '../services/types';
+import { AccountabilityRound } from '../types/AccountabilityRound';
+
 import { useDeviceInfo } from './DeviceInfoProvider';
 
 interface ActiveRoundsContextValue {
@@ -43,7 +43,6 @@ export function ActiveRoundsProvider({ children }: ActiveRoundsProviderProps) {
       setLoading(true);
       setError(null);
 
-      const storage = new StorageAdapter();
       const getActiveRoundsService = new GetActiveRoundsService();
       const activeRounds = await getActiveRoundsService.execute(deviceInfo.id);
 
@@ -54,7 +53,7 @@ export function ActiveRoundsProvider({ children }: ActiveRoundsProviderProps) {
       const summariesMap = new Map<string, RoundProgressSummary>();
 
       await Promise.all(
-        activeRounds.map(async (round) => {
+        activeRounds.map(async round => {
           try {
             const summary = await getProgressSummaryService.execute(round.id);
             summariesMap.set(round.id, summary);
@@ -82,9 +81,7 @@ export function ActiveRoundsProvider({ children }: ActiveRoundsProviderProps) {
   }, [loadActiveRounds]);
 
   return (
-    <ActiveRoundsContext.Provider
-      value={{ rounds, progressSummaries, loading, error, refresh }}
-    >
+    <ActiveRoundsContext.Provider value={{ rounds, progressSummaries, loading, error, refresh }}>
       {children}
     </ActiveRoundsContext.Provider>
   );

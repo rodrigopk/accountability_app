@@ -425,6 +425,65 @@ export function Component() {
 <View style={{ flex: 1, padding: 16 }} />
 ```
 
+### Style Module Extraction
+
+When stylesheets exceed 30 lines of code, extract them to a separate `.styles.ts` file in the same directory as the component. This improves maintainability and readability.
+
+**Do**
+
+```tsx
+// Component.tsx
+import { styles } from './Component.styles';
+
+export function Component() {
+  return <View style={styles.container}>...</View>;
+}
+
+// Component.styles.ts
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 8,
+  },
+  // ... more styles exceeding 30 lines total
+});
+```
+
+**Don't**
+
+```tsx
+// ❌ Don't keep large stylesheets inline with the component
+export function Component() {
+  const styles = StyleSheet.create({
+    container: {
+      /* ... */
+    },
+    title: {
+      /* ... */
+    },
+    // ... 30+ lines of styles
+  });
+  return <View style={styles.container}>...</View>;
+}
+```
+
+**Agent behavior**
+
+- **Always** extract stylesheets that exceed 30 lines to a separate `.styles.ts` file
+- Follow the naming convention: `ComponentName.styles.ts` for the style module
+- Export a named `styles` constant from the style module
+- Import styles in the component file: `import { styles } from './ComponentName.styles'`
+- Count all lines in the `StyleSheet.create()` object, including nested properties
+- When refactoring existing components, extract stylesheets that exceed 30 lines
+
 ---
 
 ## T1 — Testing Guidelines
@@ -572,10 +631,10 @@ Use the mock factories in `src/__mocks__/repositories.ts` for consistent test se
 
 #### Available Mocks
 
-| Factory | Returns | Use Case |
-|---------|---------|----------|
-| `createMockStorageAdapter()` | `MockStorageAdapter` | Testing repositories |
-| `createMockRoundRepository()` | `jest.Mocked<RoundRepository>` | Testing services that depend on RoundRepository |
+| Factory                          | Returns                           | Use Case                                           |
+| -------------------------------- | --------------------------------- | -------------------------------------------------- |
+| `createMockStorageAdapter()`     | `MockStorageAdapter`              | Testing repositories                               |
+| `createMockRoundRepository()`    | `jest.Mocked<RoundRepository>`    | Testing services that depend on RoundRepository    |
 | `createMockProgressRepository()` | `jest.Mocked<ProgressRepository>` | Testing services that depend on ProgressRepository |
 
 #### MockStorageAdapter
@@ -769,3 +828,52 @@ function parse(input: any): Result {
 - **Never** leave unused variables or imports in generated code
 - **Never** use `any` type unless absolutely necessary (with justification)
 - When generating code, assume it will be validated by ESLint and Prettier
+
+---
+
+## P1 - Package Management
+
+This project uses **Yarn** as the package manager. Always use Yarn for installing, updating, or removing packages.
+
+### Use Yarn for All Package Operations
+
+**Always** use `yarn` commands for package management operations.
+
+**Do**
+
+```bash
+# Install a new package
+yarn add package-name
+
+# Install a dev dependency
+yarn add -D package-name
+
+# Remove a package
+yarn remove package-name
+
+# Update packages
+yarn upgrade
+
+# Install all dependencies
+yarn install
+```
+
+**Don't**
+
+```bash
+# ❌ Never use npm
+npm install package-name
+npm install --save-dev package-name
+
+# ❌ Never use pnpm
+pnpm add package-name
+
+# ❌ Never use other package managers
+```
+
+### Agent Conduct
+
+- **Always** use `yarn` commands when installing, updating, or removing packages
+- **Never** suggest or use `npm`, `pnpm`, or other package managers
+- When generating code that requires new dependencies, use `yarn add` commands
+- If suggesting package installation, always use `yarn add` syntax
