@@ -75,9 +75,66 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
+  logButtonFlex: {
+    flex: 1,
+  },
+  logButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
   logButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  logButtonTextDisabled: {
+    color: '#999',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 8,
+  },
+  amendButton: {
+    backgroundColor: '#FF9800',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    flex: 1,
+  },
+  amendButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  statusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  statusIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
+  },
+  statusCompleted: {
+    backgroundColor: '#4CAF50',
+  },
+  statusFailed: {
+    backgroundColor: '#F44336',
+  },
+  statusPending: {
+    backgroundColor: '#FF9800',
+  },
+  statusText: {
+    fontSize: 12,
+    color: '#666',
+  },
+  failedCount: {
+    fontSize: 12,
+    color: '#F44336',
+    marginTop: 4,
   },
 });

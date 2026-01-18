@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { SummaryStepNavigationProp } from '../../navigation/types';
@@ -54,8 +54,6 @@ export function SummaryStepScreen() {
 
       // Navigate to root
       navigation.getParent()?.goBack();
-
-      Alert.alert('Success', 'Accountability round created successfully!');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create round');
     } finally {

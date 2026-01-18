@@ -2,6 +2,13 @@ import { ProgressRepository } from '../../data/repositories/ProgressRepository';
 import { RoundRepository } from '../../data/repositories/RoundRepository';
 import { StorageAdapter } from '../../data/storage/StorageAdapter';
 import { DayOfWeek } from '../../types/Goal';
+import {
+  canLogProgressForToday,
+  getAmendableDates,
+  getGoalStatusByDate,
+  formatDateToString,
+  getTodayDateString,
+} from '../../utils/progressValidation';
 import { RoundProgressSummary, GoalProgressSummary } from '../types';
 
 /**
@@ -42,6 +49,10 @@ export class GetProgressSummaryService {
     );
     const daysRemaining = Math.max(0, totalDays - daysElapsed);
 
+    const roundStartDate = formatDateToString(startDate);
+    const roundEndDate = formatDateToString(endDate);
+    const today = getTodayDateString();
+
     const goalSummaries: GoalProgressSummary[] = round.goals.map(goal => {
       const goalProgress = progress.filter(p => p.goalId === goal.id);
       const completedCount = goalProgress.length;
@@ -80,13 +91,28 @@ export class GetProgressSummaryService {
       const completionPercentage =
         expectedCount > 0 ? Math.min(100, (completedCount / expectedCount) * 100) : 0;
 
+      // Calculate failed count and amendable dates
+      const effectiveEndDate = today <= roundEndDate ? today : roundEndDate;
+      const statuses = getGoalStatusByDate(goal, goalProgress, roundStartDate, effectiveEndDate);
+      const failedCount = statuses.filter(s => s.status === 'failed').length;
+
+      // Check if can log today
+      const canLogResult = canLogProgressForToday(goal, goalProgress, roundStartDate, roundEndDate);
+
+      // Get amendable dates
+      const amendableDates = getAmendableDates(goal, goalProgress, roundStartDate, roundEndDate);
+
       return {
         goalId: goal.id,
         goalTitle: goal.title,
         completedCount,
         expectedCount,
+        failedCount,
         completionPercentage,
         totalDurationSeconds,
+        canLogToday: canLogResult.canLog,
+        canLogReason: canLogResult.reason,
+        amendableDates,
       };
     });
 
