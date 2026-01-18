@@ -1,13 +1,10 @@
+import { createMockStorageAdapter, MockStorageAdapter } from '../../../__mocks__/repositories';
 import { AccountabilityRound } from '../../../types/AccountabilityRound';
-import { StorageAdapter } from '../../storage/StorageAdapter';
 import { RoundRepository } from '../RoundRepository';
-
-// Mock StorageAdapter
-jest.mock('../../storage/StorageAdapter');
 
 describe('RoundRepository', () => {
   let repository: RoundRepository;
-  let mockStorage: jest.Mocked<StorageAdapter>;
+  let mocks: MockStorageAdapter;
   let mockGet: jest.Mock;
   let mockSet: jest.Mock;
   let mockDelete: jest.Mock;
@@ -15,22 +12,10 @@ describe('RoundRepository', () => {
   let mockMultiSet: jest.Mock;
 
   beforeEach(() => {
-    mockGet = jest.fn();
-    mockSet = jest.fn();
-    mockDelete = jest.fn();
-    mockMultiGet = jest.fn();
-    mockMultiSet = jest.fn();
+    mocks = createMockStorageAdapter();
+    ({ mockGet, mockSet, mockDelete, mockMultiGet, mockMultiSet } = mocks);
 
-    mockStorage = {
-      get: mockGet,
-      set: mockSet,
-      delete: mockDelete,
-      multiGet: mockMultiGet,
-      multiSet: mockMultiSet,
-      multiDelete: jest.fn(),
-    } as unknown as jest.Mocked<StorageAdapter>;
-
-    repository = new RoundRepository(mockStorage);
+    repository = new RoundRepository(mocks.storage);
   });
 
   afterEach(() => {

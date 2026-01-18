@@ -1,13 +1,10 @@
+import { createMockStorageAdapter, MockStorageAdapter } from '../../../__mocks__/repositories';
 import { GoalProgress } from '../../../types/GoalProgress';
-import { StorageAdapter } from '../../storage/StorageAdapter';
 import { ProgressRepository } from '../ProgressRepository';
-
-// Mock StorageAdapter
-jest.mock('../../storage/StorageAdapter');
 
 describe('ProgressRepository', () => {
   let repository: ProgressRepository;
-  let mockStorage: jest.Mocked<StorageAdapter>;
+  let mocks: MockStorageAdapter;
   let mockGet: jest.Mock;
   let mockSet: jest.Mock;
   let mockDelete: jest.Mock;
@@ -16,23 +13,10 @@ describe('ProgressRepository', () => {
   let mockMultiDelete: jest.Mock;
 
   beforeEach(() => {
-    mockGet = jest.fn();
-    mockSet = jest.fn();
-    mockDelete = jest.fn();
-    mockMultiGet = jest.fn();
-    mockMultiSet = jest.fn();
-    mockMultiDelete = jest.fn();
+    mocks = createMockStorageAdapter();
+    ({ mockGet, mockSet, mockDelete, mockMultiGet, mockMultiSet, mockMultiDelete } = mocks);
 
-    mockStorage = {
-      get: mockGet,
-      set: mockSet,
-      delete: mockDelete,
-      multiGet: mockMultiGet,
-      multiSet: mockMultiSet,
-      multiDelete: mockMultiDelete,
-    } as unknown as jest.Mocked<StorageAdapter>;
-
-    repository = new ProgressRepository(mockStorage);
+    repository = new ProgressRepository(mocks.storage);
   });
 
   afterEach(() => {

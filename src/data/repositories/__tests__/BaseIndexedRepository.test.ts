@@ -1,4 +1,4 @@
-import { StorageAdapter } from '../../storage/StorageAdapter';
+import { createMockStorageAdapter, MockStorageAdapter } from '../../../__mocks__/repositories';
 import { BaseIndexedRepository, SecondaryIndexConfig } from '../BaseIndexedRepository';
 
 // Create a concrete implementation for testing
@@ -41,12 +41,9 @@ class TestRepository extends BaseIndexedRepository<TestEntity> {
   }
 }
 
-// Mock StorageAdapter
-jest.mock('../../storage/StorageAdapter');
-
 describe('BaseIndexedRepository', () => {
   let repository: TestRepository;
-  let mockStorage: jest.Mocked<StorageAdapter>;
+  let mocks: MockStorageAdapter;
   let mockGet: jest.Mock;
   let mockSet: jest.Mock;
   let mockDelete: jest.Mock;
@@ -55,23 +52,10 @@ describe('BaseIndexedRepository', () => {
   let mockMultiDelete: jest.Mock;
 
   beforeEach(() => {
-    mockGet = jest.fn();
-    mockSet = jest.fn();
-    mockDelete = jest.fn();
-    mockMultiGet = jest.fn();
-    mockMultiSet = jest.fn();
-    mockMultiDelete = jest.fn();
+    mocks = createMockStorageAdapter();
+    ({ mockGet, mockSet, mockDelete, mockMultiGet, mockMultiSet, mockMultiDelete } = mocks);
 
-    mockStorage = {
-      get: mockGet,
-      set: mockSet,
-      delete: mockDelete,
-      multiGet: mockMultiGet,
-      multiSet: mockMultiSet,
-      multiDelete: mockMultiDelete,
-    } as unknown as jest.Mocked<StorageAdapter>;
-
-    repository = new TestRepository(mockStorage);
+    repository = new TestRepository(mocks.storage);
   });
 
   afterEach(() => {

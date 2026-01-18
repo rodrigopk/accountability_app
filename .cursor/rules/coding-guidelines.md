@@ -551,26 +551,6 @@ test('useDeviceInfo returns loading state initially', () => {
 });
 ```
 
-### Avoid Large Snapshots
-
-Use targeted assertions instead of large snapshot tests.
-
-**Do**
-
-```tsx
-test('renders device ID', () => {
-  const { getByText } = render(<DeviceDisplay deviceInfo={mockInfo} />);
-  expect(getByText(mockInfo.id)).toBeTruthy();
-});
-```
-
-**Don't**
-
-```tsx
-// ❌ Avoid large snapshots
-expect(component.toJSON()).toMatchSnapshot();
-```
-
 ### Cleanup
 
 Use `afterEach(cleanup)` and `jest.clearAllMocks()` to prevent test pollution.
@@ -586,108 +566,99 @@ afterEach(() => {
 });
 ```
 
----
+### Use Shared Mock Factories
 
-## Agent Conduct
+Use the mock factories in `src/__mocks__/repositories.ts` for consistent test setup. Avoid duplicating mock setup code across test files.
 
-- When implementing features, **always** follow the layered architecture pattern
-- **Never** create reverse dependencies (Data → UI)
-- **Always** use functional components and hooks
-- **Always** write tests using React Native Testing Library
-- When uncertain about layer placement, **ask** or follow the dependency direction rule
-- Prefer extracting logic to appropriate layers over quick fixes
+#### Available Mocks
 
----
+| Factory | Returns | Use Case |
+|---------|---------|----------|
+| `createMockStorageAdapter()` | `MockStorageAdapter` | Testing repositories |
+| `createMockRoundRepository()` | `jest.Mocked<RoundRepository>` | Testing services that depend on RoundRepository |
+| `createMockProgressRepository()` | `jest.Mocked<ProgressRepository>` | Testing services that depend on ProgressRepository |
 
-## L1 - Linting and Formatting
+#### MockStorageAdapter
 
-All code must pass ESLint and Prettier checks before commit. Pre-commit hooks enforce this automatically.
-
-### Import Ordering
-
-Imports must be ordered in groups with blank lines between them:
-
-1. Built-in/Node modules
-2. External packages (react, react-native, etc.)
-3. Internal modules (@/, src/)
-4. Parent imports (../)
-5. Sibling imports (./)
-6. Index imports
+The `createMockStorageAdapter()` factory returns both the mock storage instance and individual mock functions for configuring test behavior:
 
 **Do**
 
 ```tsx
-import { useEffect, useState } from 'react';
+import { createMockStorageAdapter, MockStorageAdapter } from '../../../__mocks__/repositories';
+import { MyRepository } from '../MyRepository';
 
-import { View, Text } from 'react-native';
+describe('MyRepository', () => {
+  let repository: MyRepository;
+  let mocks: MockStorageAdapter;
+  let mockGet: jest.Mock;
+  let mockSet: jest.Mock;
 
-import { DeviceRepository } from '../data/repositories/DeviceRepository';
+  beforeEach(() => {
+    mocks = createMockStorageAdapter();
+    ({ mockGet, mockSet } = mocks);
 
-import { styles } from './styles';
+    repository = new MyRepository(mocks.storage);
+  });
+
+  it('should fetch data', async () => {
+    mockGet.mockResolvedValue({ id: '123', name: 'Test' });
+
+    const result = await repository.getById('123');
+
+    expect(mockGet).toHaveBeenCalledWith('entity_123');
+    expect(result).toEqual({ id: '123', name: 'Test' });
+  });
+});
 ```
 
 **Don't**
 
 ```tsx
-// Unordered imports
-import { styles } from './styles';
-import { View, Text } from 'react-native';
-import { useEffect, useState } from 'react';
-import { DeviceRepository } from '../data/repositories/DeviceRepository';
+// ❌ Don't duplicate mock setup in each test file
+let mockGet: jest.Mock;
+let mockSet: jest.Mock;
+// ... more mock declarations
+
+beforeEach(() => {
+  mockGet = jest.fn();
+  mockSet = jest.fn();
+  // ... more mock setup
+
+  mockStorage = {
+    get: mockGet,
+    set: mockSet,
+    // ... more methods
+  } as unknown as jest.Mocked<StorageAdapter>;
+});
 ```
 
-### Code Formatting Standards
+#### Repository Mocks
 
-- **Print width**: 100 characters max per line
-- **Indentation**: 2 spaces (no tabs)
-- **Quotes**: Single quotes for strings
-- **Semicolons**: Always use semicolons
-- **Trailing commas**: Always in multi-line structures
-- **Bracket spacing**: Spaces inside object literals `{ foo: bar }`
-
-### No Unused Variables
-
-All variables must be used. Prefix intentionally unused parameters with underscore.
+For service tests, use the repository mock factories:
 
 **Do**
 
 ```tsx
-function handler(_event: Event, data: Data) {
-  console.log(data);
-}
+import { createMockRoundRepository } from '../../../__mocks__/repositories';
+
+describe('MyService', () => {
+  let mockRoundRepository: jest.Mocked<RoundRepository>;
+
+  beforeEach(() => {
+    mockRoundRepository = createMockRoundRepository();
+  });
+
+  it('should get active round', async () => {
+    mockRoundRepository.getActiveRound.mockResolvedValue(mockRound);
+
+    const service = new MyService(mockRoundRepository);
+    const result = await service.execute();
+
+    expect(result).toEqual(mockRound);
+  });
+});
 ```
-
-**Don't**
-
-```tsx
-function handler(event: Event, data: Data) {
-  console.log(data); // 'event' is unused - ESLint error
-}
-```
-
-### Avoid `any` Type
-
-The `any` type bypasses TypeScript's type checking. Use specific types or `unknown`.
-
-**Do**
-
-```tsx
-function parse(input: unknown): Result {
-  if (typeof input === 'string') {
-    /* ... */
-  }
-}
-```
-
-**Don't**
-
-```tsx
-function parse(input: any): Result {
-  /* ... */
-}
-```
-
-#
 
 ---
 
@@ -697,8 +668,11 @@ function parse(input: any): Result {
 - **Never** create reverse dependencies (Data → UI)
 - **Always** use functional components and hooks
 - **Always** write tests using React Native Testing Library
+- **Always** use shared mock factories from `src/__mocks__/repositories.ts` when writing tests
 - When uncertain about layer placement, **ask** or follow the dependency direction rule
 - Prefer extracting logic to appropriate layers over quick fixes
+
+---
 
 ## L1 - Linting and Formatting
 
