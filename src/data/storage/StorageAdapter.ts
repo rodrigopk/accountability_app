@@ -50,4 +50,62 @@ export class StorageAdapter {
       throw error;
     }
   }
+
+  /**
+   * Get multiple values from storage by keys
+   * @param keys Array of storage keys
+   * @returns Array of parsed values (null for missing keys)
+   */
+  async multiGet<T>(keys: string[]): Promise<(T | null)[]> {
+    if (keys.length === 0) {
+      return [];
+    }
+    try {
+      const pairs = await AsyncStorage.multiGet(keys);
+      return pairs.map(([, value]) => {
+        if (value === null) {
+          return null;
+        }
+        return JSON.parse(value) as T;
+      });
+    } catch (error) {
+      console.error('Error reading multiple keys from storage:', error);
+      return keys.map(() => null);
+    }
+  }
+
+  /**
+   * Set multiple values in storage atomically
+   * @param entries Array of [key, value] pairs
+   */
+  async multiSet<T>(entries: [string, T][]): Promise<void> {
+    if (entries.length === 0) {
+      return;
+    }
+    try {
+      const serialized = entries.map(
+        ([key, value]) => [key, JSON.stringify(value)] as [string, string],
+      );
+      await AsyncStorage.multiSet(serialized);
+    } catch (error) {
+      console.error('Error writing multiple keys to storage:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete multiple keys from storage
+   * @param keys Array of storage keys to delete
+   */
+  async multiDelete(keys: string[]): Promise<void> {
+    if (keys.length === 0) {
+      return;
+    }
+    try {
+      await AsyncStorage.multiRemove(keys);
+    } catch (error) {
+      console.error('Error deleting multiple keys from storage:', error);
+      throw error;
+    }
+  }
 }

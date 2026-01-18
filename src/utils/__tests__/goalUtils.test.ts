@@ -1,0 +1,74 @@
+import { GoalFrequency, DayOfWeek } from '../../types/Goal';
+import { isDaily, isTimesPerWeek, isSpecificDays } from '../goalUtils';
+
+describe('goalUtils', () => {
+  describe('isDaily', () => {
+    it('should return true for daily frequency', () => {
+      const frequency: GoalFrequency = { type: 'daily' };
+      expect(isDaily(frequency)).toBe(true);
+    });
+
+    it('should return false for timesPerWeek frequency', () => {
+      const frequency: GoalFrequency = { type: 'timesPerWeek', count: 3 };
+      expect(isDaily(frequency)).toBe(false);
+    });
+
+    it('should return false for specificDays frequency', () => {
+      const frequency: GoalFrequency = { type: 'specificDays', days: ['monday', 'friday'] };
+      expect(isDaily(frequency)).toBe(false);
+    });
+  });
+
+  describe('isTimesPerWeek', () => {
+    it('should return true for timesPerWeek frequency', () => {
+      const frequency: GoalFrequency = { type: 'timesPerWeek', count: 4 };
+      expect(isTimesPerWeek(frequency)).toBe(true);
+    });
+
+    it('should return false for daily frequency', () => {
+      const frequency: GoalFrequency = { type: 'daily' };
+      expect(isTimesPerWeek(frequency)).toBe(false);
+    });
+
+    it('should return false for specificDays frequency', () => {
+      const frequency: GoalFrequency = { type: 'specificDays', days: ['monday'] };
+      expect(isTimesPerWeek(frequency)).toBe(false);
+    });
+  });
+
+  describe('isSpecificDays', () => {
+    it('should return true for specificDays frequency', () => {
+      const frequency: GoalFrequency = { type: 'specificDays', days: ['monday', 'wednesday'] };
+      expect(isSpecificDays(frequency)).toBe(true);
+    });
+
+    it('should return false for daily frequency', () => {
+      const frequency: GoalFrequency = { type: 'daily' };
+      expect(isSpecificDays(frequency)).toBe(false);
+    });
+
+    it('should return false for timesPerWeek frequency', () => {
+      const frequency: GoalFrequency = { type: 'timesPerWeek', count: 5 };
+      expect(isSpecificDays(frequency)).toBe(false);
+    });
+
+    it('should handle empty days array', () => {
+      const frequency: GoalFrequency = { type: 'specificDays', days: [] };
+      expect(isSpecificDays(frequency)).toBe(true);
+    });
+
+    it('should handle all days of week', () => {
+      const allDays: DayOfWeek[] = [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+      ];
+      const frequency: GoalFrequency = { type: 'specificDays', days: allDays };
+      expect(isSpecificDays(frequency)).toBe(true);
+    });
+  });
+});

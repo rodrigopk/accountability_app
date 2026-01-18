@@ -34,4 +34,12 @@ module.exports = {
       },
     },
   },
+  overrides: [
+    {
+      files: ['**/*.test.{ts,tsx,js,jsx}', 'jest.setup.js'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };

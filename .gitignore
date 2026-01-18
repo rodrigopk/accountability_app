@@ -142,6 +142,10 @@ web-build/
 # TypeScript
 *.tsbuildinfo
 
+# ESLint & Prettier cache
+.eslintcache
+.prettiercache
+
 # Testing
 /coverage
 .nyc_output
@@ -176,6 +180,8 @@ lerna-debug.log*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.cursor/*
+!.cursor/rules/
 .idea
 *.suo
 *.ntvs*
