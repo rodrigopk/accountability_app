@@ -1,9 +1,11 @@
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 // Root stack with Main and CreateRound stacks
 export type RootStackParamList = {
   Main: undefined;
   CreateRoundWizard: undefined;
+  RoundDetail: { roundId: string };
 };
 
 // CreateRound wizard stack
@@ -28,3 +30,7 @@ export type SummaryStepNavigationProp = StackNavigationProp<
   CreateRoundStackParamList,
   'SummaryStep'
 >;
+
+// Navigation prop types for RoundDetail screen
+export type RoundDetailNavigationProp = StackNavigationProp<RootStackParamList, 'RoundDetail'>;
+export type RoundDetailRouteProp = RouteProp<RootStackParamList, 'RoundDetail'>;

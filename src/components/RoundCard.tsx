@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { RoundProgressSummary } from '../services/types';
 import { AccountabilityRound } from '../types/AccountabilityRound';
@@ -10,19 +10,20 @@ import { styles } from './RoundCard.styles';
 interface RoundCardProps {
   round: AccountabilityRound;
   progressSummary: RoundProgressSummary | null;
+  onPress: () => void;
 }
 
 /**
  * Component displaying a single accountability round as a card
  */
-export function RoundCard({ round, progressSummary }: RoundCardProps) {
+export function RoundCard({ round, progressSummary, onPress }: RoundCardProps) {
   const title = round.reward || 'Accountability Round';
   const dateRange = formatDateRange(round.startDate, round.endDate);
   const overallProgress = calculateOverallProgress(progressSummary);
   const goalTitles = round.goals.map(goal => goal.title).join(', ');
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.dateRange}>{dateRange}</Text>
 
@@ -40,6 +41,6 @@ export function RoundCard({ round, progressSummary }: RoundCardProps) {
           {goalTitles}
         </Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }

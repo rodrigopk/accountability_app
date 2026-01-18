@@ -66,7 +66,11 @@ export function ActiveRoundsScreen() {
         data={rounds}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <RoundCard round={item} progressSummary={progressSummaries.get(item.id) || null} />
+          <RoundCard
+            round={item}
+            progressSummary={progressSummaries.get(item.id) || null}
+            onPress={() => navigation.navigate('RoundDetail', { roundId: item.id })}
+          />
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
