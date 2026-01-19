@@ -132,7 +132,7 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
       });
 
       resetModal();
-      refresh();
+      await refresh();
 
       Alert.alert(
         'Progress Logged',

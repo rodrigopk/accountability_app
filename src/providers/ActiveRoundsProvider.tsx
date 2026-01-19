@@ -12,7 +12,7 @@ interface ActiveRoundsContextValue {
   progressSummaries: Map<string, RoundProgressSummary>;
   loading: boolean;
   error: Error | null;
-  refresh: () => void;
+  refresh: () => Promise<void>;
 }
 
 const ActiveRoundsContext = createContext<ActiveRoundsContextValue | undefined>(undefined);
@@ -76,8 +76,8 @@ export function ActiveRoundsProvider({ children }: ActiveRoundsProviderProps) {
     loadActiveRounds();
   }, [loadActiveRounds]);
 
-  const refresh = useCallback(() => {
-    loadActiveRounds();
+  const refresh = useCallback(async () => {
+    await loadActiveRounds();
   }, [loadActiveRounds]);
 
   return (

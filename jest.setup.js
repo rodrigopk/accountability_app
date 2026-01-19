@@ -94,3 +94,27 @@ jest.mock('react-native-device-info', () => ({
 jest.mock('uuid', () => ({
   v4: jest.fn(() => 'mock-uuid-' + Math.random().toString(36).substring(7)),
 }));
+
+// Mock react-native-navigation
+jest.mock('react-native-navigation', () => ({
+  Navigation: {
+    events: jest.fn(() => ({
+      registerModalDismissedListener: jest.fn(() => ({
+        remove: jest.fn(),
+      })),
+      registerComponentDidAppearListener: jest.fn(() => ({
+        remove: jest.fn(),
+      })),
+      registerComponentDidDisappearListener: jest.fn(() => ({
+        remove: jest.fn(),
+      })),
+    })),
+    push: jest.fn(),
+    pop: jest.fn(),
+    showModal: jest.fn(),
+    dismissModal: jest.fn(),
+    dismissAllModals: jest.fn(),
+    setRoot: jest.fn(),
+    setStackRoot: jest.fn(),
+  },
+}));

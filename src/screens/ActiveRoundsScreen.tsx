@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 
 import { EmptyState } from '../components/EmptyState';
 import { RoundCard } from '../components/RoundCard';
@@ -26,6 +27,18 @@ export function ActiveRoundsScreen() {
 
   // Refresh when returning from wizard
   useOnScreenFocus(refresh);
+
+  // Also listen for modal dismissal to ensure refresh happens when wizard closes
+  useEffect(() => {
+    const subscription = Navigation.events().registerModalDismissedListener(() => {
+      // Refresh when any modal (including wizard) is dismissed
+      refresh().catch(err => console.error('Error refreshing after modal dismissal:', err));
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [refresh]);
 
   if (loading) {
     return (

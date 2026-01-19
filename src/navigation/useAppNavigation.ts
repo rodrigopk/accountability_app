@@ -43,7 +43,7 @@ export function isRNNActive(): boolean {
  */
 export function useAppNavigation() {
   const goToRoundDetail = useCallback((params: RoundDetailParams) => {
-    navigationService.push('RoundDetail', params);
+    navigationService.push('RoundDetail', params as unknown as Record<string, unknown>);
   }, []);
 
   const goBack = useCallback(() => {
@@ -92,18 +92,27 @@ export function useWizardNavigation() {
 
 /**
  * Hook to execute a callback when the screen comes into focus.
+ * Supports both sync and async callbacks.
  */
-export function useOnScreenFocus(callback: () => void) {
+export function useOnScreenFocus(callback: () => void | Promise<void>) {
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
   useEffect(() => {
     // Call immediately on mount
-    callbackRef.current();
+    const result = callbackRef.current();
+    // Handle async callbacks
+    if (result instanceof Promise) {
+      result.catch(err => console.error('Error in useOnScreenFocus callback:', err));
+    }
 
     // Subscribe to focus events
     const unsubscribe = navigationService.onScreenFocus(() => {
-      callbackRef.current();
+      const focusResult = callbackRef.current();
+      // Handle async callbacks
+      if (focusResult instanceof Promise) {
+        focusResult.catch(err => console.error('Error in useOnScreenFocus callback:', err));
+      }
     });
 
     return unsubscribe;

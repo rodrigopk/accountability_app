@@ -4,7 +4,6 @@ import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'rea
 import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { WizardScreenName } from '../../navigation/NavigationService';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
-import { useActiveRounds } from '../../providers/ActiveRoundsProvider';
 import { useDeviceInfo } from '../../providers/DeviceInfoProvider';
 import { CreateRoundService } from '../../services/round/CreateRoundService';
 import { useWizardStore } from '../../stores/useWizardStore';
@@ -17,7 +16,6 @@ export function SummaryStepScreen() {
   const { goToWizardStep, goBackWizard, closeWizard } = useWizardNavigation();
   const { period, goals, reward, punishment, reset } = useWizardStore();
   const { deviceInfo } = useDeviceInfo();
-  const { refresh } = useActiveRounds();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,9 +48,9 @@ export function SummaryStepScreen() {
 
       // Success - reset wizard and navigate to main screen
       await reset();
-      refresh();
 
-      // Navigate to root
+      // Navigate to root - ActiveRoundsScreen will refresh via useOnScreenFocus
+      // when it comes back into focus after the modal is dismissed
       closeWizard();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create round');
