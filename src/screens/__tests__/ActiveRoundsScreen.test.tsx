@@ -8,12 +8,13 @@ jest.mock('../../providers/ActiveRoundsProvider', () => ({
   useActiveRounds: jest.fn(),
 }));
 
-// Mock react-navigation
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({
-    navigate: jest.fn(),
-    addListener: jest.fn(() => jest.fn()),
+// Mock the navigation abstraction layer
+jest.mock('../../navigation/useAppNavigation', () => ({
+  useAppNavigation: () => ({
+    openCreateWizard: jest.fn(),
+    goToRoundDetail: jest.fn(),
   }),
+  useOnScreenFocus: jest.fn(),
 }));
 
 describe('ActiveRoundsScreen', () => {

@@ -1,30 +1,33 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
-import { RewardPunishmentStepNavigationProp } from '../../navigation/types';
-import { useWizard } from '../../providers/CreateRoundWizardProvider';
+import { useWizardNavigation } from '../../navigation/useAppNavigation';
+import { useWizardStore } from '../../stores/useWizardStore';
 
 const MAX_LENGTH = 200;
 
 export function RewardPunishmentStepScreen() {
-  const navigation = useNavigation<RewardPunishmentStepNavigationProp>();
-  const { state, updateRewardPunishment } = useWizard();
+  const { goToWizardStep, goBackWizard } = useWizardNavigation();
+  const {
+    reward: storedReward,
+    punishment: storedPunishment,
+    updateRewardPunishment,
+  } = useWizardStore();
 
-  const [reward, setReward] = useState(state.reward);
-  const [punishment, setPunishment] = useState(state.punishment);
+  const [reward, setReward] = useState(storedReward);
+  const [punishment, setPunishment] = useState(storedPunishment);
 
   const handleNext = () => {
     updateRewardPunishment(reward.trim(), punishment.trim());
-    navigation.navigate('SummaryStep');
+    goToWizardStep('SummaryStep');
   };
 
   const handleBack = () => {
     // Save current values before going back
     updateRewardPunishment(reward.trim(), punishment.trim());
-    navigation.goBack();
+    goBackWizard();
   };
 
   const isValid = reward.trim().length > 0 && punishment.trim().length > 0;

@@ -1,6 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
+
+import { useWizardNavigation } from '../../navigation/useAppNavigation';
 
 import { styles } from './WizardHeader.styles';
 
@@ -12,7 +13,7 @@ interface WizardHeaderProps {
 }
 
 export function WizardHeader({ currentStep, totalSteps, title, onBack }: WizardHeaderProps) {
-  const navigation = useNavigation();
+  const { closeWizard } = useWizardNavigation();
 
   const handleCancel = () => {
     Alert.alert(
@@ -24,7 +25,7 @@ export function WizardHeader({ currentStep, totalSteps, title, onBack }: WizardH
           text: 'Yes, Cancel',
           style: 'destructive',
           onPress: () => {
-            navigation.getParent()?.goBack();
+            closeWizard();
           },
         },
       ],

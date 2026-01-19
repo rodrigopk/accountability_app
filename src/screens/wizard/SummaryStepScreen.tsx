@@ -1,21 +1,21 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { WizardHeader } from '../../components/wizard/WizardHeader';
-import { SummaryStepNavigationProp } from '../../navigation/types';
+import { WizardScreenName } from '../../navigation/NavigationService';
+import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useActiveRounds } from '../../providers/ActiveRoundsProvider';
-import { useWizard } from '../../providers/CreateRoundWizardProvider';
 import { useDeviceInfo } from '../../providers/DeviceInfoProvider';
 import { CreateRoundService } from '../../services/round/CreateRoundService';
+import { useWizardStore } from '../../stores/useWizardStore';
 import { formatFrequency } from '../../utils/goalUtils';
 import { formatDateRange } from '../../utils/roundUtils';
 
 import { styles } from './SummaryStepScreen.styles';
 
 export function SummaryStepScreen() {
-  const navigation = useNavigation<SummaryStepNavigationProp>();
-  const { state, reset } = useWizard();
+  const { goToWizardStep, goBackWizard, closeWizard } = useWizardNavigation();
+  const { period, goals, reward, punishment, reset } = useWizardStore();
   const { deviceInfo } = useDeviceInfo();
   const { refresh } = useActiveRounds();
 
@@ -36,16 +36,16 @@ export function SummaryStepScreen() {
 
       await createRoundService.execute({
         deviceId: deviceInfo.id,
-        startDate: state.period.startDate!.toISOString(),
-        endDate: state.period.endDate!.toISOString(),
-        goals: state.goals.map(goal => ({
+        startDate: period.startDate!.toISOString(),
+        endDate: period.endDate!.toISOString(),
+        goals: goals.map(goal => ({
           title: goal.title,
           description: goal.description,
           frequency: goal.frequency,
           durationSeconds: goal.durationSeconds,
         })),
-        reward: state.reward,
-        punishment: state.punishment,
+        reward,
+        punishment,
       });
 
       // Success - reset wizard and navigate to main screen
@@ -53,7 +53,7 @@ export function SummaryStepScreen() {
       refresh();
 
       // Navigate to root
-      navigation.getParent()?.goBack();
+      closeWizard();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create round');
     } finally {
@@ -61,22 +61,19 @@ export function SummaryStepScreen() {
     }
   };
 
-  const navigateToStep = (step: 'PeriodStep' | 'GoalsStep' | 'RewardPunishmentStep') => {
-    navigation.navigate(step);
+  const navigateToStep = (step: WizardScreenName) => {
+    goToWizardStep(step);
   };
 
   const handleBack = () => {
-    navigation.goBack();
+    goBackWizard();
   };
 
-  if (!state.period.startDate || !state.period.endDate) {
+  if (!period.startDate || !period.endDate) {
     return null; // Should never happen
   }
 
-  const dateRange = formatDateRange(
-    state.period.startDate.toISOString(),
-    state.period.endDate.toISOString(),
-  );
+  const dateRange = formatDateRange(period.startDate.toISOString(), period.endDate.toISOString());
 
   return (
     <View style={styles.container}>
@@ -100,10 +97,10 @@ export function SummaryStepScreen() {
         {/* Goals Section */}
         <TouchableOpacity style={styles.section} onPress={() => navigateToStep('GoalsStep')}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionLabel}>Goals ({state.goals.length})</Text>
+            <Text style={styles.sectionLabel}>Goals ({goals.length})</Text>
             <Text style={styles.editText}>Edit</Text>
           </View>
-          {state.goals.map((goal, index) => (
+          {goals.map((goal, index) => (
             <View key={goal.id} style={styles.goalItem}>
               <Text style={styles.goalTitle}>
                 {index + 1}. {goal.title}
@@ -126,11 +123,11 @@ export function SummaryStepScreen() {
           </View>
           <View style={styles.rewardPunishmentItem}>
             <Text style={styles.rpLabel}>Reward:</Text>
-            <Text style={styles.rpValue}>{state.reward}</Text>
+            <Text style={styles.rpValue}>{reward}</Text>
           </View>
           <View style={styles.rewardPunishmentItem}>
             <Text style={styles.rpLabel}>Punishment:</Text>
-            <Text style={styles.rpValue}>{state.punishment}</Text>
+            <Text style={styles.rpValue}>{punishment}</Text>
           </View>
         </TouchableOpacity>
 

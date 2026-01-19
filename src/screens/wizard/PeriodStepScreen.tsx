@@ -1,26 +1,25 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { PeriodPicker } from '../../components/PeriodPicker';
 import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
-import { PeriodStepNavigationProp } from '../../navigation/types';
-import { useWizard } from '../../providers/CreateRoundWizardProvider';
+import { useWizardNavigation } from '../../navigation/useAppNavigation';
+import { useWizardStore } from '../../stores/useWizardStore';
 import { MILLISECONDS_PER_WEEK } from '../../utils/timeConstants';
 
 export function PeriodStepScreen() {
-  const navigation = useNavigation<PeriodStepNavigationProp>();
-  const { state, updatePeriod } = useWizard();
+  const { goToWizardStep } = useWizardNavigation();
+  const { period, updatePeriod } = useWizardStore();
 
-  const [startDate, setStartDate] = useState<Date>(state.period.startDate || new Date());
+  const [startDate, setStartDate] = useState<Date>(period.startDate || new Date());
   const [endDate, setEndDate] = useState<Date>(
-    state.period.endDate || new Date(Date.now() + MILLISECONDS_PER_WEEK),
+    period.endDate || new Date(Date.now() + MILLISECONDS_PER_WEEK),
   );
 
   const handleNext = () => {
     updatePeriod(startDate, endDate);
-    navigation.navigate('GoalsStep');
+    goToWizardStep('GoalsStep');
   };
 
   // PeriodPicker ensures end date is always after start date

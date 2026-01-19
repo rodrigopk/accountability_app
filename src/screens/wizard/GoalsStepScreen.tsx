@@ -1,21 +1,20 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useRef } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { GoalCard } from '../../components/GoalCard';
 import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
-import { GoalsStepNavigationProp } from '../../navigation/types';
-import { useWizard } from '../../providers/CreateRoundWizardProvider';
+import { useWizardNavigation } from '../../navigation/useAppNavigation';
+import { useWizardStore } from '../../stores/useWizardStore';
 
 export function GoalsStepScreen() {
-  const navigation = useNavigation<GoalsStepNavigationProp>();
-  const { state, addGoal, updateGoal, removeGoal, isStepValid } = useWizard();
+  const { goToWizardStep, goBackWizard } = useWizardNavigation();
+  const { goals, addGoal, updateGoal, removeGoal, isStepValid } = useWizardStore();
   const flatListRef = useRef<FlatList>(null);
 
   const handleAddGoal = () => {
     // Get the index of the new goal (current length will be the index after adding)
-    const newGoalIndex = state.goals.length;
+    const newGoalIndex = goals.length;
 
     addGoal({
       title: '',
@@ -35,11 +34,11 @@ export function GoalsStepScreen() {
   };
 
   const handleNext = () => {
-    navigation.navigate('RewardPunishmentStep');
+    goToWizardStep('RewardPunishmentStep');
   };
 
   const handleBack = () => {
-    navigation.goBack();
+    goBackWizard();
   };
 
   return (
@@ -51,14 +50,14 @@ export function GoalsStepScreen() {
           Add the goals you want to achieve during this accountability round.
         </Text>
 
-        {state.goals.length === 0 ? (
+        {goals.length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyText}>No goals added yet</Text>
           </View>
         ) : (
           <FlatList
             ref={flatListRef}
-            data={state.goals}
+            data={goals}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <GoalCard

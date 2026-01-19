@@ -1,6 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -12,29 +10,22 @@ import {
 
 import { EmptyState } from '../components/EmptyState';
 import { RoundCard } from '../components/RoundCard';
-import { RootStackParamList } from '../navigation/types';
+import { useAppNavigation, useOnScreenFocus } from '../navigation/useAppNavigation';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
-
-type ActiveRoundsNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
 /**
  * Screen component displaying all active accountability rounds
  */
 export function ActiveRoundsScreen() {
-  const navigation = useNavigation<ActiveRoundsNavigationProp>();
+  const { openCreateWizard, goToRoundDetail } = useAppNavigation();
   const { rounds, progressSummaries, loading, error, refresh } = useActiveRounds();
 
   const handleCreatePress = () => {
-    navigation.navigate('CreateRoundWizard');
+    openCreateWizard();
   };
 
   // Refresh when returning from wizard
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      refresh();
-    });
-    return unsubscribe;
-  }, [navigation, refresh]);
+  useOnScreenFocus(refresh);
 
   if (loading) {
     return (
@@ -69,7 +60,7 @@ export function ActiveRoundsScreen() {
           <RoundCard
             round={item}
             progressSummary={progressSummaries.get(item.id) || null}
-            onPress={() => navigation.navigate('RoundDetail', { roundId: item.id })}
+            onPress={() => goToRoundDetail({ roundId: item.id })}
           />
         )}
         contentContainerStyle={styles.listContent}

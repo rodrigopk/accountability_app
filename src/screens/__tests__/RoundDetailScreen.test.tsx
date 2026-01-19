@@ -9,10 +9,16 @@ jest.mock('../../providers/ActiveRoundsProvider', () => ({
   useActiveRounds: jest.fn(),
 }));
 
-// Mock react-navigation
+// Mock react-navigation (still needed for useRoute until we pass props)
 jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({ goBack: jest.fn() }),
   useRoute: () => ({ params: { roundId: 'round-1' } }),
+}));
+
+// Mock the navigation abstraction layer
+jest.mock('../../navigation/useAppNavigation', () => ({
+  useAppNavigation: () => ({
+    goBack: jest.fn(),
+  }),
 }));
 
 // Mock Alert
