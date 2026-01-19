@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface EmptyStateProps {
   onCreatePress: () => void;
@@ -9,8 +10,9 @@ interface EmptyStateProps {
  * Component displaying empty state when no active rounds exist
  */
 export function EmptyState({ onCreatePress }: EmptyStateProps) {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <Text style={styles.icon}>📋</Text>
       <Text style={styles.title}>No active accountability rounds</Text>
       <Text style={styles.message}>Create your first round to start tracking your goals</Text>

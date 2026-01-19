@@ -10,8 +10,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RoundDetailGoalCard } from '../components/RoundDetailGoalCard';
+import { useAppNavigation } from '../navigation/useAppNavigation';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 import { LogProgressService } from '../services/progress/LogProgressService';
 import { Goal } from '../types/Goal';
@@ -21,6 +23,13 @@ import { styles } from './RoundDetailScreen.styles';
 
 interface RoundDetailScreenProps {
   roundId: string;
+}
+
+/**
+ * Back arrow icon component - creates a left-pointing chevron
+ */
+function BackArrowIcon() {
+  return <View style={styles.backArrow} />;
 }
 
 interface LogProgressModalState {
@@ -44,6 +53,8 @@ const initialModalState: LogProgressModalState = {
  */
 export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
   const { rounds, progressSummaries, refresh } = useActiveRounds();
+  const { goBack } = useAppNavigation();
+  const insets = useSafeAreaInsets();
 
   const [modalState, setModalState] = useState<LogProgressModalState>(initialModalState);
   const [durationMinutes, setDurationMinutes] = useState('');
@@ -150,43 +161,65 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
 
   if (!round) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Round not found</Text>
+      <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <View style={styles.container}>
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity style={styles.backButton} onPress={goBack}>
+              <BackArrowIcon />
+              <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.errorText}>Round not found</Text>
+        </View>
       </View>
     );
   }
 
   return (
     <>
-      <ScrollView style={styles.container}>
-        {/* Round Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>{round.reward || 'Accountability Round'}</Text>
-          <Text style={styles.dateRange}>{formatDateRange(round.startDate, round.endDate)}</Text>
-          {round.punishment && (
-            <View style={styles.punishmentContainer}>
-              <Text style={styles.punishmentLabel}>Punishment:</Text>
-              <Text style={styles.punishmentValue}>{round.punishment}</Text>
-            </View>
-          )}
-        </View>
+      <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.scrollContent}
+          contentInsetAdjustmentBehavior="automatic"
+        >
+          {/* Back Button */}
+          <View style={styles.backButtonContainer}>
+            <TouchableOpacity style={styles.backButton} onPress={goBack}>
+              <BackArrowIcon />
+              <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* Goals Section */}
-        <Text style={styles.sectionTitle}>Goals</Text>
-        {round.goals.map(goal => {
-          const goalProgressSummary =
-            progressSummary?.goalSummaries.find(g => g.goalId === goal.id) || null;
-          return (
-            <RoundDetailGoalCard
-              key={goal.id}
-              goal={goal}
-              progressSummary={goalProgressSummary}
-              onLogProgress={() => handleLogProgress(goal)}
-              onAmendProgress={() => handleAmendProgress(goal)}
-            />
-          );
-        })}
-      </ScrollView>
+          {/* Round Header */}
+          <View style={styles.header}>
+            <Text style={styles.title}>{round.reward || 'Accountability Round'}</Text>
+            <Text style={styles.dateRange}>{formatDateRange(round.startDate, round.endDate)}</Text>
+            {round.punishment && (
+              <View style={styles.punishmentContainer}>
+                <Text style={styles.punishmentLabel}>Punishment:</Text>
+                <Text style={styles.punishmentValue}>{round.punishment}</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Goals Section */}
+          <Text style={styles.sectionTitle}>Goals</Text>
+          {round.goals.map(goal => {
+            const goalProgressSummary =
+              progressSummary?.goalSummaries.find(g => g.goalId === goal.id) || null;
+            return (
+              <RoundDetailGoalCard
+                key={goal.id}
+                goal={goal}
+                progressSummary={goalProgressSummary}
+                onLogProgress={() => handleLogProgress(goal)}
+                onAmendProgress={() => handleAmendProgress(goal)}
+              />
+            );
+          })}
+        </ScrollView>
+      </View>
 
       {/* Log Progress Modal */}
       <Modal

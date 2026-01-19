@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { Navigation } from 'react-native-navigation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState } from '../components/EmptyState';
 import { RoundCard } from '../components/RoundCard';
@@ -20,6 +21,7 @@ import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 export function ActiveRoundsScreen() {
   const { openCreateWizard, goToRoundDetail } = useAppNavigation();
   const { rounds, progressSummaries, loading, error, refresh } = useActiveRounds();
+  const insets = useSafeAreaInsets();
 
   const handleCreatePress = () => {
     openCreateWizard();
@@ -42,7 +44,7 @@ export function ActiveRoundsScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <ActivityIndicator size="large" color="#007AFF" testID="loading-indicator" />
         <Text style={styles.loadingText}>Loading rounds...</Text>
       </View>
@@ -51,7 +53,7 @@ export function ActiveRoundsScreen() {
 
   if (error) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <Text style={styles.errorText}>Error: {error.message}</Text>
         <Text style={styles.retryText} onPress={refresh}>
           Tap to retry
@@ -65,7 +67,7 @@ export function ActiveRoundsScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <FlatList
         data={rounds}
         keyExtractor={item => item.id}
@@ -78,8 +80,12 @@ export function ActiveRoundsScreen() {
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior="automatic"
       />
-      <TouchableOpacity style={styles.fab} onPress={handleCreatePress}>
+      <TouchableOpacity
+        style={[styles.fab, { bottom: 20 + insets.bottom }]}
+        onPress={handleCreatePress}
+      >
         <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     </View>

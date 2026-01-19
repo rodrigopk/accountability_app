@@ -69,7 +69,7 @@ export function GoalsStepScreen() {
             contentContainerStyle={styles.listContent}
             onScrollToIndexFailed={info => {
               // Fallback: if scrollToIndex fails, scroll to end instead
-              const wait = new Promise(resolve => setTimeout(resolve, 500));
+              const wait = new Promise<void>(resolve => setTimeout(() => resolve(), 500));
               wait.then(() => {
                 flatListRef.current?.scrollToIndex({
                   index: info.index,

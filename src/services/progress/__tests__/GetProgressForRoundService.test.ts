@@ -12,6 +12,7 @@ describe('GetProgressForRoundService', () => {
         id: 'progress-1',
         roundId: 'round-1',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       },

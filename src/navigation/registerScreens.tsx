@@ -4,6 +4,7 @@
  */
 import React, { useEffect } from 'react';
 import { Navigation } from 'react-native-navigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ActiveRoundsProvider } from '../providers/ActiveRoundsProvider';
 import { DeviceInfoProvider } from '../providers/DeviceInfoProvider';
@@ -48,11 +49,13 @@ function withProviders<P extends object>(
     }, [componentId]);
 
     return (
-      <DeviceInfoProvider>
-        <ActiveRoundsProvider>
-          <Screen {...(screenProps as P)} />
-        </ActiveRoundsProvider>
-      </DeviceInfoProvider>
+      <SafeAreaProvider>
+        <DeviceInfoProvider>
+          <ActiveRoundsProvider>
+            <Screen {...(screenProps as P)} />
+          </ActiveRoundsProvider>
+        </DeviceInfoProvider>
+      </SafeAreaProvider>
     );
   }
 

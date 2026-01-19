@@ -30,6 +30,7 @@ describe('ProgressRepository', () => {
       const progressData = {
         roundId: 'round-123',
         goalId: 'goal-456',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
         notes: 'Great session!',
@@ -53,6 +54,7 @@ describe('ProgressRepository', () => {
       const progressData = {
         roundId: 'round-123',
         goalId: 'goal-456',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -73,6 +75,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -81,6 +84,7 @@ describe('ProgressRepository', () => {
         id: 'progress-2',
         roundId: 'round-123',
         goalId: 'goal-2',
+        targetDate: '2024-01-16',
         completedAt: '2024-01-16T10:00:00Z',
         durationSeconds: 1800,
       };
@@ -109,6 +113,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -128,6 +133,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -136,6 +142,7 @@ describe('ProgressRepository', () => {
         id: 'progress-2',
         roundId: 'round-123',
         goalId: 'goal-2',
+        targetDate: '2024-01-16',
         completedAt: '2024-01-16T10:00:00Z',
         durationSeconds: 1800,
       };
@@ -144,6 +151,7 @@ describe('ProgressRepository', () => {
         id: 'progress-3',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-17',
         completedAt: '2024-01-17T10:00:00Z',
         durationSeconds: 2400,
       };
@@ -161,6 +169,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -180,6 +189,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -217,6 +227,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
@@ -225,6 +236,7 @@ describe('ProgressRepository', () => {
         id: 'progress-2',
         roundId: 'round-123',
         goalId: 'goal-2',
+        targetDate: '2024-01-16',
         completedAt: '2024-01-16T10:00:00Z',
         durationSeconds: 1800,
       };
@@ -265,6 +277,7 @@ describe('ProgressRepository', () => {
         id: 'progress-1',
         roundId: 'round-123',
         goalId: 'goal-1',
+        targetDate: '2024-01-15',
         completedAt: '2024-01-15T10:00:00Z',
         durationSeconds: 3600,
       };
