@@ -63,8 +63,14 @@ export class GetProgressSummaryService {
       if (goal.frequency.type === 'daily') {
         expectedCount = daysElapsed;
       } else if (goal.frequency.type === 'timesPerWeek') {
-        const weeksElapsed = daysElapsed / 7;
-        expectedCount = Math.floor(weeksElapsed * goal.frequency.count);
+        if (daysElapsed < 7) {
+          // In the first week, use the weekly quota as expected count
+          expectedCount = goal.frequency.count;
+        } else {
+          // After the first week, calculate based on full weeks elapsed
+          const weeksElapsed = daysElapsed / 7;
+          expectedCount = Math.floor(weeksElapsed * goal.frequency.count);
+        }
       } else if (goal.frequency.type === 'specificDays') {
         // Count occurrences of specific days within elapsed days
         const dayNames: DayOfWeek[] = [

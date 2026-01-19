@@ -138,6 +138,58 @@ describe('GetProgressSummaryService', () => {
     jest.useRealTimers();
   });
 
+  it('should calculate progress summary for timesPerWeek goals in first week', async () => {
+    const now = new Date('2024-01-03T12:00:00Z'); // Only 3 days elapsed
+    jest.useFakeTimers();
+    jest.setSystemTime(now);
+
+    const mockRoundRepository = createMockRoundRepository();
+    const mockProgressRepository = createMockProgressRepository();
+    const service = new GetProgressSummaryService(mockRoundRepository, mockProgressRepository);
+
+    const round: AccountabilityRound = {
+      id: 'round-1',
+      deviceId: 'device-123',
+      startDate: '2024-01-01',
+      endDate: '2024-01-31',
+      goals: [
+        {
+          id: 'goal-1',
+          title: 'Exercise 3x per week',
+          frequency: { type: 'timesPerWeek', count: 3 },
+          durationSeconds: 3600,
+        },
+      ],
+      reward: 'Reward',
+      punishment: 'Punishment',
+      createdAt: '2024-01-01T00:00:00Z',
+      updatedAt: '2024-01-01T00:00:00Z',
+    };
+
+    const progress: GoalProgress[] = [
+      {
+        id: 'progress-1',
+        roundId: 'round-1',
+        goalId: 'goal-1',
+        targetDate: '2024-01-02',
+        completedAt: '2024-01-02T10:00:00Z',
+        durationSeconds: 3600,
+      },
+    ];
+
+    mockRoundRepository.getRoundById.mockResolvedValue(round);
+    mockProgressRepository.getProgressForRound.mockResolvedValue(progress);
+
+    const result = await service.execute('round-1');
+
+    // In the first week (< 7 days), expected count should be the weekly quota (3)
+    expect(result.goalSummaries[0].expectedCount).toBe(3);
+    expect(result.goalSummaries[0].completedCount).toBe(1);
+    expect(result.goalSummaries[0].completionPercentage).toBeCloseTo(33.33, 1); // 1/3 * 100
+
+    jest.useRealTimers();
+  });
+
   it('should throw error when round not found', async () => {
     const mockRoundRepository = createMockRoundRepository();
     const mockProgressRepository = createMockProgressRepository();
