@@ -117,3 +117,31 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// Fix for CMake clean errors with missing codegen directories
+// Skip CMake clean if codegen directories don't exist (common during clean operations)
+tasks.whenTaskAdded { task ->
+    if (task.name.contains("externalNativeBuildClean")) {
+        task.onlyIf {
+            // Check if at least one codegen directory exists
+            def codegenDirs = [
+                "../node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni",
+                "../node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni",
+                "../node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni",
+                "../node_modules/react-native-get-random-values/android/build/generated/source/codegen/jni",
+                "../node_modules/react-native-navigation/android/build/generated/source/codegen/jni"
+            ]
+            
+            def anyExist = codegenDirs.any { dir ->
+                def dirFile = file(dir)
+                dirFile.exists()
+            }
+            
+            if (!anyExist) {
+                logger.warn("Skipping ${task.name} - codegen directories not found. This is normal during clean operations.")
+            }
+            
+            return anyExist
+        }
+    }
+}

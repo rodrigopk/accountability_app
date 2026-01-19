@@ -9,9 +9,13 @@ jest.mock('../../providers/ActiveRoundsProvider', () => ({
   useActiveRounds: jest.fn(),
 }));
 
-// Mock react-navigation (still needed for useRoute until we pass props)
-jest.mock('@react-navigation/native', () => ({
-  useRoute: () => ({ params: { roundId: 'round-1' } }),
+// Mock react-native-navigation
+jest.mock('react-native-navigation', () => ({
+  Navigation: {
+    events: jest.fn(() => ({
+      registerComponentDidAppearListener: jest.fn(() => ({ remove: jest.fn() })),
+    })),
+  },
 }));
 
 // Mock the navigation abstraction layer
@@ -71,7 +75,7 @@ describe('RoundDetailScreen', () => {
   });
 
   it('displays round title from reward', () => {
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.getByText('Buy new shoes')).toBeTruthy();
   });
 
@@ -81,17 +85,17 @@ describe('RoundDetailScreen', () => {
       rounds: [roundWithoutReward],
       progressSummaries: new Map(),
     });
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.getByText('Accountability Round')).toBeTruthy();
   });
 
   it('displays all goals', () => {
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.getByText('Exercise')).toBeTruthy();
   });
 
   it('displays punishment when present', () => {
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.getByText(/No dessert/)).toBeTruthy();
   });
 
@@ -101,7 +105,7 @@ describe('RoundDetailScreen', () => {
       rounds: [roundWithoutPunishment],
       progressSummaries: new Map(),
     });
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.queryByText(/Punishment:/)).toBeNull();
   });
 
@@ -110,12 +114,12 @@ describe('RoundDetailScreen', () => {
       rounds: [],
       progressSummaries: new Map(),
     });
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="nonexistent" />);
     expect(screen.getByText('Round not found')).toBeTruthy();
   });
 
   it('displays goal progress when available', () => {
-    render(<RoundDetailScreen />);
+    render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.getByText('10/15 completed')).toBeTruthy();
   });
 });

@@ -1,4 +1,3 @@
-import { useRoute } from '@react-navigation/native';
 import React, { useState, useCallback } from 'react';
 import {
   Alert,
@@ -13,13 +12,16 @@ import {
 } from 'react-native';
 
 import { RoundDetailGoalCard } from '../components/RoundDetailGoalCard';
-import { RoundDetailRouteProp } from '../navigation/types';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 import { LogProgressService } from '../services/progress/LogProgressService';
 import { Goal } from '../types/Goal';
 import { formatDateRange } from '../utils/roundUtils';
 
 import { styles } from './RoundDetailScreen.styles';
+
+interface RoundDetailScreenProps {
+  roundId: string;
+}
 
 interface LogProgressModalState {
   visible: boolean;
@@ -40,10 +42,7 @@ const initialModalState: LogProgressModalState = {
 /**
  * Screen component displaying detailed information for a single accountability round
  */
-export function RoundDetailScreen() {
-  const route = useRoute<RoundDetailRouteProp>();
-  const { roundId } = route.params;
-
+export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
   const { rounds, progressSummaries, refresh } = useActiveRounds();
 
   const [modalState, setModalState] = useState<LogProgressModalState>(initialModalState);

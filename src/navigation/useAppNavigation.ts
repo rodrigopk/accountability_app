@@ -2,22 +2,24 @@
  * Navigation hook that screens use. This provides semantic navigation methods
  * that abstract away the underlying navigation library.
  */
-import { useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useRef } from 'react';
 
 import { NavigationService, RoundDetailParams, WizardScreenName } from './NavigationService';
-import { reactNavigationService } from './ReactNavigationService';
-import { CreateRoundStackParamList } from './types';
+import { rnnNavigationService } from './RNNNavigationService';
 
-// Singleton navigation service - can be swapped to RNN implementation in Phase 2
-let navigationService: NavigationService = reactNavigationService;
+// Singleton navigation service - using RNN implementation
+let navigationService: NavigationService = rnnNavigationService;
+
+// Flag to indicate if we're using RNN (set when setNavigationService is called with RNN service)
+let isUsingRNN = false;
 
 /**
  * Set the navigation service implementation.
  * Called at app startup to configure which navigation library to use.
  */
-export function setNavigationService(service: NavigationService) {
+export function setNavigationService(service: NavigationService, usingRNN = false) {
   navigationService = service;
+  isUsingRNN = usingRNN;
 }
 
 /**
@@ -26,6 +28,13 @@ export function setNavigationService(service: NavigationService) {
  */
 export function getNavigationService(): NavigationService {
   return navigationService;
+}
+
+/**
+ * Check if we're using React Native Navigation.
+ */
+export function isRNNActive(): boolean {
+  return isUsingRNN;
 }
 
 /**
@@ -59,27 +68,18 @@ export function useAppNavigation() {
 
 /**
  * Hook for wizard screens to navigate between wizard steps.
- * This must be called from within a wizard screen (inside the wizard's Stack.Navigator)
- * so that useNavigation() returns the correct navigator context.
+ * Uses the navigation service which works with both React Navigation and RNN.
  */
 export function useWizardNavigation() {
-  // Get the navigation from the current screen's context (inside wizard's Stack.Navigator)
-  const navigation =
-    useNavigation<import('@react-navigation/native').NavigationProp<CreateRoundStackParamList>>();
-
-  const goToWizardStep = useCallback(
-    (step: WizardScreenName) => {
-      navigation.navigate(step as keyof CreateRoundStackParamList);
-    },
-    [navigation],
-  );
+  const goToWizardStep = useCallback((step: WizardScreenName) => {
+    navigationService.pushWizardStep(step);
+  }, []);
 
   const goBackWizard = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+    navigationService.popWizardStep();
+  }, []);
 
   const closeWizard = useCallback(() => {
-    // Use the root navigator to dismiss the modal
     navigationService.dismissWizard();
   }, []);
 

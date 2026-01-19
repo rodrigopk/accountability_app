@@ -5,12 +5,33 @@
 // Must be imported at the very top before any other imports
 // Required for uuid to work in React Native (provides crypto.getRandomValues polyfill)
 import 'react-native-get-random-values';
-// Required for @react-navigation/stack on Android
-import 'react-native-gesture-handler';
 
-import { AppRegistry } from 'react-native';
+import { Navigation } from 'react-native-navigation';
 
-import App from './App';
-import { name as appName } from './app.json';
+import { registerScreens, setDefaultOptions, setRoot } from './src/navigation/registerScreens';
+import { rnnNavigationService } from './src/navigation/RNNNavigationService';
+import { setNavigationService } from './src/navigation/useAppNavigation';
 
-AppRegistry.registerComponent(appName, () => App);
+// Set RNN as the navigation service
+setNavigationService(rnnNavigationService, true);
+
+// Register all screens
+try {
+  registerScreens();
+} catch (error) {
+  console.error('Failed to register screens:', error);
+  throw error;
+}
+
+// Set default options for all screens
+setDefaultOptions();
+
+// Launch app when ready - must use registerAppLaunchedListener for RNN v7
+Navigation.events().registerAppLaunchedListener(() => {
+  try {
+    setRoot();
+  } catch (error) {
+    console.error('Failed to set root:', error);
+    throw error;
+  }
+});

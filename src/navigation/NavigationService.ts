@@ -24,6 +24,10 @@ export interface NavigationService {
   showWizard(): void;
   dismissWizard(): void;
 
+  // Wizard step navigation (inside wizard modal)
+  pushWizardStep(step: WizardScreenName): void;
+  popWizardStep(): void;
+
   // Events
   onScreenFocus(callback: () => void): () => void;
 }
