@@ -10,10 +10,12 @@ import { ActiveRoundsProvider } from '../providers/ActiveRoundsProvider';
 import { DeviceInfoProvider } from '../providers/DeviceInfoProvider';
 import { ActiveRoundsScreen } from '../screens/ActiveRoundsScreen';
 import { RoundDetailScreen } from '../screens/RoundDetailScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
 import { GoalsStepScreen } from '../screens/wizard/GoalsStepScreen';
 import { PeriodStepScreen } from '../screens/wizard/PeriodStepScreen';
 import { RewardPunishmentStepScreen } from '../screens/wizard/RewardPunishmentStepScreen';
 import { SummaryStepScreen } from '../screens/wizard/SummaryStepScreen';
+import { colors } from '../theme';
 
 import { setCurrentComponentId } from './RNNNavigationService';
 
@@ -74,6 +76,7 @@ export function registerScreens() {
     Navigation.registerComponent('RoundDetail', () =>
       withProviders(RoundDetailScreen as React.ComponentType<{ roundId: string }>, 'RoundDetail'),
     );
+    Navigation.registerComponent('Settings', () => withProviders(SettingsScreen, 'Settings'));
 
     // Wizard screens
     Navigation.registerComponent('PeriodStep', () => withProviders(PeriodStepScreen, 'PeriodStep'));
@@ -113,17 +116,62 @@ export function setDefaultOptions() {
 export function setRoot() {
   Navigation.setRoot({
     root: {
-      stack: {
+      bottomTabs: {
+        id: 'MainTabs',
         children: [
           {
-            component: {
-              name: 'Main',
+            stack: {
+              id: 'RoundsStack',
+              children: [
+                {
+                  component: {
+                    name: 'Main',
+                    options: { topBar: { visible: false } },
+                  },
+                },
+              ],
               options: {
-                topBar: { visible: false },
+                bottomTab: {
+                  text: 'Rounds',
+                  icon: require('../../assets/icons/rounds-outline.png'),
+                  iconColor: colors.textTertiary,
+                  selectedIconColor: colors.primary,
+                  textColor: colors.textTertiary,
+                  selectedTextColor: colors.primary,
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              id: 'SettingsStack',
+              children: [
+                {
+                  component: {
+                    name: 'Settings',
+                    options: { topBar: { visible: false } },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Settings',
+                  icon: require('../../assets/icons/settings-outline.png'),
+                  iconColor: colors.textTertiary,
+                  selectedIconColor: colors.primary,
+                  textColor: colors.textTertiary,
+                  selectedTextColor: colors.primary,
+                },
               },
             },
           },
         ],
+        options: {
+          bottomTabs: {
+            backgroundColor: colors.surface,
+            titleDisplayMode: 'alwaysShow',
+          },
+        },
       },
     },
   });
