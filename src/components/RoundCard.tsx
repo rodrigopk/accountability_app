@@ -20,27 +20,48 @@ export function RoundCard({ round, progressSummary, onPress }: RoundCardProps) {
   const title = round.reward || 'Accountability Round';
   const dateRange = formatDateRange(round.startDate, round.endDate);
   const overallProgress = calculateOverallProgress(progressSummary);
-  const goalTitles = round.goals.map(goal => goal.title).join(', ');
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.dateRange}>{dateRange}</Text>
+      {/* Header row with Reward label and Date badge */}
+      <View style={styles.headerRow}>
+        <Text style={styles.rewardLabel}>Reward</Text>
+        <View style={styles.dateBadge}>
+          <Text style={styles.dateBadgeIcon}>📅</Text>
+          <Text style={styles.dateBadgeText}>{dateRange}</Text>
+        </View>
+      </View>
 
+      {/* Title */}
+      <Text style={styles.title}>{title}</Text>
+
+      {/* Progress section */}
       {progressSummary && (
-        <View style={styles.progressContainer}>
+        <View style={styles.progressSection}>
+          <View style={styles.progressHeader}>
+            <Text style={styles.progressLabel}>Progress</Text>
+            <Text style={styles.progressValue}>{overallProgress}%</Text>
+          </View>
           <View style={styles.progressBar}>
             <View style={[styles.progressFill, { width: `${overallProgress}%` }]} />
           </View>
-          <Text style={styles.progressText}>{overallProgress}%</Text>
         </View>
       )}
 
-      {goalTitles && (
-        <Text style={styles.goals} numberOfLines={2}>
-          {goalTitles}
-        </Text>
-      )}
+      {/* Goals chips */}
+      <View style={styles.goalsSection}>
+        <Text style={styles.goalsLabel}>Goals</Text>
+        <View style={styles.goalsChipsRow}>
+          {round.goals.slice(0, 3).map(goal => (
+            <View key={goal.id} style={styles.goalChip}>
+              {goal.emoji && <Text style={styles.goalChipEmoji}>{goal.emoji}</Text>}
+              <Text style={styles.goalChipText} numberOfLines={1}>
+                {goal.title}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }

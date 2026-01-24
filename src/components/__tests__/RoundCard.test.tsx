@@ -56,12 +56,28 @@ describe('RoundCard', () => {
     jest.clearAllMocks();
   });
 
+  it('displays Reward label', () => {
+    render(
+      <RoundCard round={mockRound} progressSummary={mockProgressSummary} onPress={mockOnPress} />,
+    );
+
+    expect(screen.getByText('Reward')).toBeTruthy();
+  });
+
   it('displays round reward as title', () => {
     render(
       <RoundCard round={mockRound} progressSummary={mockProgressSummary} onPress={mockOnPress} />,
     );
 
     expect(screen.getByText('Buy new shoes')).toBeTruthy();
+  });
+
+  it('displays Goals label', () => {
+    render(
+      <RoundCard round={mockRound} progressSummary={mockProgressSummary} onPress={mockOnPress} />,
+    );
+
+    expect(screen.getByText('Goals')).toBeTruthy();
   });
 
   it('displays goal titles', () => {
@@ -71,6 +87,15 @@ describe('RoundCard', () => {
 
     expect(screen.getByText(/Exercise/)).toBeTruthy();
     expect(screen.getByText(/Read/)).toBeTruthy();
+  });
+
+  it('displays goal emoji when present', () => {
+    const roundWithEmoji: AccountabilityRound = {
+      ...mockRound,
+      goals: [{ ...mockRound.goals[0], emoji: '🏃' }],
+    };
+    render(<RoundCard round={roundWithEmoji} progressSummary={null} onPress={mockOnPress} />);
+    expect(screen.getByText('🏃')).toBeTruthy();
   });
 
   it('displays formatted date period', () => {

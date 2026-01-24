@@ -1,59 +1,108 @@
 import { StyleSheet } from 'react-native';
 
+import { colors, spacing, borderRadius, typography, shadows } from '../theme';
+
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
-    marginHorizontal: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    marginHorizontal: spacing.lg,
+    ...shadows.md,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000',
-    marginBottom: 8,
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
   },
-  dateRange: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
+  rewardLabel: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.medium,
+    color: colors.primary,
+    textTransform: 'uppercase',
   },
-  progressContainer: {
+  dateBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    backgroundColor: colors.primaryLight,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+    gap: spacing.xs,
+  },
+  dateBadgeIcon: {
+    fontSize: typography.fontSize.sm,
+  },
+  dateBadgeText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textPrimary,
+    fontWeight: typography.fontWeight.medium,
+  },
+  title: {
+    fontSize: typography.fontSize.xl,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
+    marginBottom: spacing.md,
+  },
+  progressSection: {
+    marginBottom: spacing.md,
+  },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.xs,
+  },
+  progressLabel: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
+  },
+  progressValue: {
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.primary,
   },
   progressBar: {
-    flex: 1,
     height: 8,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 4,
+    backgroundColor: colors.progressBackground,
+    borderRadius: borderRadius.sm,
     overflow: 'hidden',
-    marginRight: 8,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#4CAF50',
-    borderRadius: 4,
+    backgroundColor: colors.progressFill,
+    borderRadius: borderRadius.sm,
   },
-  progressText: {
-    fontSize: 12,
-    color: '#666',
-    minWidth: 40,
-    textAlign: 'right',
+  goalsSection: {
+    marginTop: spacing.sm,
   },
-  goals: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
+  goalsLabel: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
+    marginBottom: spacing.sm,
+  },
+  goalsChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  goalChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.md,
+    gap: spacing.xs,
+  },
+  goalChipEmoji: {
+    fontSize: typography.fontSize.md,
+  },
+  goalChipText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textPrimary,
+    maxWidth: 80,
   },
 });
