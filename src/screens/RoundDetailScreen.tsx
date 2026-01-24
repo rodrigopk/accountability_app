@@ -17,19 +17,11 @@ import { useAppNavigation } from '../navigation/useAppNavigation';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 import { LogProgressService } from '../services/progress/LogProgressService';
 import { Goal } from '../types/Goal';
-import { formatDateRange } from '../utils/roundUtils';
 
 import { styles } from './RoundDetailScreen.styles';
 
 interface RoundDetailScreenProps {
   roundId: string;
-}
-
-/**
- * Back arrow icon component - creates a left-pointing chevron
- */
-function BackArrowIcon() {
-  return <View style={styles.backArrow} />;
 }
 
 interface LogProgressModalState {
@@ -162,13 +154,14 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
   if (!round) {
     return (
       <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <View style={styles.screenHeader}>
+          <TouchableOpacity style={styles.backButton} onPress={goBack}>
+            <Text style={styles.backArrow}>←</Text>
+          </TouchableOpacity>
+          <Text style={styles.screenTitle}>Round Details</Text>
+          <View style={styles.headerSpacer} />
+        </View>
         <View style={styles.container}>
-          <View style={styles.backButtonContainer}>
-            <TouchableOpacity style={styles.backButton} onPress={goBack}>
-              <BackArrowIcon />
-              <Text style={styles.backButtonText}>Back</Text>
-            </TouchableOpacity>
-          </View>
           <Text style={styles.errorText}>Round not found</Text>
         </View>
       </View>
@@ -183,28 +176,31 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
           contentContainerStyle={styles.scrollContent}
           contentInsetAdjustmentBehavior="automatic"
         >
-          {/* Back Button */}
-          <View style={styles.backButtonContainer}>
+          {/* Screen Header */}
+          <View style={styles.screenHeader}>
             <TouchableOpacity style={styles.backButton} onPress={goBack}>
-              <BackArrowIcon />
-              <Text style={styles.backButtonText}>Back</Text>
+              <Text style={styles.backArrow}>←</Text>
             </TouchableOpacity>
+            <Text style={styles.screenTitle}>Round Details</Text>
+            <View style={styles.headerSpacer} />
           </View>
 
-          {/* Round Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>{round.reward || 'Accountability Round'}</Text>
-            <Text style={styles.dateRange}>{formatDateRange(round.startDate, round.endDate)}</Text>
-            {round.punishment && (
-              <View style={styles.punishmentContainer}>
-                <Text style={styles.punishmentLabel}>Punishment:</Text>
-                <Text style={styles.punishmentValue}>{round.punishment}</Text>
+          {/* Punishment banner (if exists) */}
+          {round.punishment && (
+            <View style={styles.punishmentBanner}>
+              <Text style={styles.punishmentIcon}>⚠️</Text>
+              <View>
+                <Text style={styles.punishmentLabel}>PUNISHMENT</Text>
+                <Text style={styles.punishmentText}>{round.punishment}</Text>
               </View>
-            )}
-          </View>
+            </View>
+          )}
 
-          {/* Goals Section */}
-          <Text style={styles.sectionTitle}>Goals</Text>
+          {/* Goals section header */}
+          <View style={styles.goalsSectionHeader}>
+            <Text style={styles.sectionTitle}>Your Goals</Text>
+            <Text style={styles.goalsCount}>{round.goals.length} Active</Text>
+          </View>
           {round.goals.map(goal => {
             const goalProgressSummary =
               progressSummary?.goalSummaries.find(g => g.goalId === goal.id) || null;

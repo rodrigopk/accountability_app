@@ -25,6 +25,9 @@ jest.mock('../../navigation/useAppNavigation', () => ({
   }),
 }));
 
+// Mock react-native-safe-area-context (shared mock)
+jest.mock('react-native-safe-area-context');
+
 // Mock Alert
 jest.spyOn(Alert, 'alert');
 
@@ -74,19 +77,9 @@ describe('RoundDetailScreen', () => {
     });
   });
 
-  it('displays round title from reward', () => {
+  it('displays screen title', () => {
     render(<RoundDetailScreen roundId="round-1" />);
-    expect(screen.getByText('Buy new shoes')).toBeTruthy();
-  });
-
-  it('displays fallback title when reward is empty', () => {
-    const roundWithoutReward = { ...mockRound, reward: '' };
-    (useActiveRounds as jest.Mock).mockReturnValue({
-      rounds: [roundWithoutReward],
-      progressSummaries: new Map(),
-    });
-    render(<RoundDetailScreen roundId="round-1" />);
-    expect(screen.getByText('Accountability Round')).toBeTruthy();
+    expect(screen.getByText('Round Details')).toBeTruthy();
   });
 
   it('displays all goals', () => {
@@ -94,19 +87,30 @@ describe('RoundDetailScreen', () => {
     expect(screen.getByText('Exercise')).toBeTruthy();
   });
 
-  it('displays punishment when present', () => {
+  it('displays punishment banner when present', () => {
     render(<RoundDetailScreen roundId="round-1" />);
+    expect(screen.getByText('PUNISHMENT')).toBeTruthy();
     expect(screen.getByText(/No dessert/)).toBeTruthy();
   });
 
-  it('does not display punishment section when punishment is empty', () => {
+  it('does not display punishment banner when punishment is empty', () => {
     const roundWithoutPunishment = { ...mockRound, punishment: '' };
     (useActiveRounds as jest.Mock).mockReturnValue({
       rounds: [roundWithoutPunishment],
       progressSummaries: new Map(),
     });
     render(<RoundDetailScreen roundId="round-1" />);
-    expect(screen.queryByText(/Punishment:/)).toBeNull();
+    expect(screen.queryByText('PUNISHMENT')).toBeNull();
+  });
+
+  it('displays Your Goals section header', () => {
+    render(<RoundDetailScreen roundId="round-1" />);
+    expect(screen.getByText('Your Goals')).toBeTruthy();
+  });
+
+  it('displays goals count badge', () => {
+    render(<RoundDetailScreen roundId="round-1" />);
+    expect(screen.getByText('1 Active')).toBeTruthy();
   });
 
   it('shows error state when round not found', () => {
