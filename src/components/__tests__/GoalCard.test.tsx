@@ -7,6 +7,9 @@ import { GoalCard } from '../GoalCard';
 // Mock Alert
 jest.spyOn(Alert, 'alert');
 
+// Mock rn-emoji-keyboard (shared mock)
+jest.mock('rn-emoji-keyboard');
+
 describe('GoalCard', () => {
   const mockOnUpdate = jest.fn();
   const mockOnRemove = jest.fn();
@@ -114,6 +117,36 @@ describe('GoalCard', () => {
 
       // Now Remove button should be visible
       expect(screen.getByText('Remove Goal')).toBeTruthy();
+    });
+  });
+
+  describe('emoji functionality', () => {
+    it('displays emoji picker in edit mode', () => {
+      render(<GoalCard goal={newGoal} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
+      expect(screen.getByTestId('emoji-picker-button')).toBeTruthy();
+    });
+
+    it('calls onUpdate with emoji when emoji is selected', () => {
+      render(<GoalCard goal={newGoal} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
+      // Open the emoji picker
+      fireEvent.press(screen.getByTestId('emoji-picker-button'));
+      // Select an emoji
+      fireEvent.press(screen.getByTestId('emoji-option'));
+      expect(mockOnUpdate).toHaveBeenCalledWith({ emoji: '🎯' });
+    });
+
+    it('displays emoji in show mode header when present', () => {
+      const goalWithEmoji: Goal = {
+        ...completedGoal,
+        emoji: '🏃',
+      };
+      render(<GoalCard goal={goalWithEmoji} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
+      expect(screen.getByText('🏃')).toBeTruthy();
+    });
+
+    it('does not display emoji in show mode when not present', () => {
+      render(<GoalCard goal={completedGoal} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
+      expect(screen.queryByText('➕')).toBeNull();
     });
   });
 });

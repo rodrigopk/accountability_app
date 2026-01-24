@@ -2,33 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react-native';
 
 import { EmojiPickerButton } from '../EmojiPickerButton';
 
-interface MockEmojiPickerProps {
-  open: boolean;
-  onEmojiSelected: (emoji: { emoji: string }) => void;
-  onClose: () => void;
-}
-
-jest.mock('rn-emoji-keyboard', () => {
-  const React = require('react');
-  return {
-    __esModule: true,
-    default: ({ open, onEmojiSelected, onClose }: MockEmojiPickerProps) => {
-      if (!open) return null;
-      return React.createElement(
-        require('react-native').View,
-        { testID: 'emoji-picker-modal' },
-        React.createElement(require('react-native').TouchableOpacity, {
-          testID: 'emoji-option',
-          onPress: () => onEmojiSelected({ emoji: '🎯' }),
-        }),
-        React.createElement(require('react-native').TouchableOpacity, {
-          testID: 'close-picker',
-          onPress: onClose,
-        }),
-      );
-    },
-  };
-});
+jest.mock('rn-emoji-keyboard');
 
 describe('EmojiPickerButton', () => {
   const mockOnChange = jest.fn();

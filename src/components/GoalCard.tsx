@@ -5,6 +5,7 @@ import { Goal } from '../types/Goal';
 import { formatFrequency, formatDuration } from '../utils/goalUtils';
 
 import { DurationPicker } from './DurationPicker';
+import { EmojiPickerButton } from './EmojiPickerButton';
 import { FrequencySelector } from './FrequencySelector';
 import { styles } from './GoalCard.styles';
 
@@ -38,6 +39,7 @@ export function GoalCard({ goal, onUpdate, onRemove }: GoalCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
+        {goal.emoji && <Text style={styles.emojiDisplay}>{goal.emoji}</Text>}
         <Text style={styles.title}>{goal.title || 'New Goal'}</Text>
         <View style={styles.headerRight}>
           {!isValid && (
@@ -84,6 +86,15 @@ export function GoalCard({ goal, onUpdate, onRemove }: GoalCardProps) {
             value={goal.durationSeconds}
             onChange={seconds => onUpdate({ durationSeconds: seconds })}
           />
+
+          <View style={styles.emojiRow}>
+            <Text style={styles.label}>Icon</Text>
+            <EmojiPickerButton
+              value={goal.emoji}
+              onChange={emoji => onUpdate({ emoji })}
+              size="medium"
+            />
+          </View>
 
           <TouchableOpacity style={styles.removeButton} onPress={handleRemove}>
             <Text style={styles.removeButtonText}>Remove Goal</Text>
