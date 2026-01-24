@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.lg,
     paddingBottom: spacing.md,
+    backgroundColor: colors.backgroundLight,
   },
   screenTitle: {
     fontSize: typography.fontSize.xxl,
@@ -49,6 +50,10 @@ export const styles = StyleSheet.create({
   screenSubtitle: {
     fontSize: typography.fontSize.md,
     color: colors.textSecondary,
+  },
+  list: {
+    flex: 1,
+    backgroundColor: colors.backgroundLight,
   },
   listContent: {
     paddingTop: spacing.sm,

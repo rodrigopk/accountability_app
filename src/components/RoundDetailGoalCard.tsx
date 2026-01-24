@@ -112,7 +112,7 @@ export function RoundDetailGoalCard({
           onPress={onLogProgress}
           disabled={!canLogToday}
         >
-          <Text style={styles.logButtonText}>
+          <Text style={[styles.logButtonText, !canLogToday && styles.logButtonTextDisabled]}>
             {canLogToday ? '+ Log Progress' : '✓ Weekly Quota Met'}
           </Text>
         </TouchableOpacity>

@@ -90,6 +90,7 @@ export function ActiveRoundsScreen() {
             onPress={() => goToRoundDetail({ roundId: item.id })}
           />
         )}
+        style={styles.list}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior="automatic"

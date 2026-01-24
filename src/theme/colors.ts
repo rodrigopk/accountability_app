@@ -1,11 +1,11 @@
 export const colors = {
   // Primary - Mint Green
-  primary: '#2ECC71',
-  primaryLight: '#E8F8F0',
+  primary: '#2BB673',
+  primaryLight: '#E6F6EE',
   primaryDark: '#27AE60',
 
   // Danger - Red
-  danger: '#E74C3C',
+  danger: '#F05959',
   dangerLight: '#FDEDEC',
 
   // Warning - Orange
@@ -20,6 +20,7 @@ export const colors = {
 
   // Backgrounds
   background: '#F5F5F5',
+  backgroundLight: '#FBFEFC',
   surface: '#FFFFFF',
 
   // Borders & Dividers
@@ -27,8 +28,8 @@ export const colors = {
   divider: '#EEEEEE',
 
   // Progress
-  progressBackground: '#E0E0E0',
-  progressFill: '#2ECC71',
+  progressBackground: '#E6F6EE',
+  progressFill: '#2BB673',
 
   // Transparent
   transparent: 'transparent',

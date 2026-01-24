@@ -81,8 +81,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.warning,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     gap: spacing.xs,
@@ -93,22 +95,25 @@ export const styles = StyleSheet.create({
   amendButtonText: {
     fontSize: typography.fontSize.md,
     fontWeight: typography.fontWeight.semibold,
-    color: colors.textInverse,
   },
   logButton: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.surface,
     borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     paddingVertical: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
   logButtonDisabled: {
-    backgroundColor: colors.textTertiary,
+    backgroundColor: colors.border,
+  },
+  logButtonTextDisabled: {
+    color: colors.textTertiary,
   },
   logButtonText: {
     fontSize: typography.fontSize.md,
     fontWeight: typography.fontWeight.semibold,
-    color: colors.textInverse,
   },
 });

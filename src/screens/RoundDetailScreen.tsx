@@ -17,6 +17,7 @@ import { useAppNavigation } from '../navigation/useAppNavigation';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 import { LogProgressService } from '../services/progress/LogProgressService';
 import { Goal } from '../types/Goal';
+import { formatDateRange, calculateOverallProgress } from '../utils/roundUtils';
 
 import { styles } from './RoundDetailScreen.styles';
 
@@ -183,6 +184,15 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
             </TouchableOpacity>
             <Text style={styles.screenTitle}>Round Details</Text>
             <View style={styles.headerSpacer} />
+          </View>
+
+          {/* Round Info Section */}
+          <View style={styles.roundInfoSection}>
+            <Text style={styles.roundTitle}>{round.reward}</Text>
+            <Text style={styles.roundSubtitle}>
+              📅 {formatDateRange(round.startDate, round.endDate)} •{' '}
+              {calculateOverallProgress(progressSummary)}% Complete
+            </Text>
           </View>
 
           {/* Punishment banner (if exists) */}

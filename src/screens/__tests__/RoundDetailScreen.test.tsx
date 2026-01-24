@@ -126,4 +126,19 @@ describe('RoundDetailScreen', () => {
     render(<RoundDetailScreen roundId="round-1" />);
     expect(screen.getByText('10/15')).toBeTruthy();
   });
+
+  it('displays round reward as title', () => {
+    render(<RoundDetailScreen roundId="round-1" />);
+    expect(screen.getByText('Buy new shoes')).toBeTruthy();
+  });
+
+  it('displays date range', () => {
+    render(<RoundDetailScreen roundId="round-1" />);
+    expect(screen.getByText(/Jan 1 - 31, 2026/)).toBeTruthy();
+  });
+
+  it('displays completion percentage', () => {
+    render(<RoundDetailScreen roundId="round-1" />);
+    expect(screen.getByText(/67% Complete/)).toBeTruthy();
+  });
 });

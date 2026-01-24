@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     paddingVertical: spacing.lg,
     borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
+    borderBottomColor: colors.border,
   },
   title: {
     fontSize: typography.fontSize.xl,

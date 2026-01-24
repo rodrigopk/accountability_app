@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   rewardLabel: {
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.medium,
-    color: colors.primary,
+    color: colors.textSecondary,
     textTransform: 'uppercase',
   },
   dateBadge: {

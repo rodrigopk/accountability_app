@@ -41,10 +41,24 @@ export const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
+  roundInfoSection: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+  },
+  roundTitle: {
+    fontSize: typography.fontSize.xxl,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
+    marginBottom: spacing.xs,
+  },
+  roundSubtitle: {
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
+  },
   punishmentBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.warningLight,
+    backgroundColor: colors.danger,
     marginHorizontal: spacing.lg,
     marginTop: spacing.lg,
     marginBottom: spacing.md,
@@ -58,13 +72,13 @@ export const styles = StyleSheet.create({
   punishmentLabel: {
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.medium,
-    color: colors.warning,
+    color: colors.textInverse,
     textTransform: 'uppercase',
     marginBottom: spacing.xs,
   },
   punishmentText: {
     fontSize: typography.fontSize.md,
-    color: colors.textPrimary,
+    color: colors.textInverse,
     fontWeight: typography.fontWeight.medium,
   },
   goalsSectionHeader: {
