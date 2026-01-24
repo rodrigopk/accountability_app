@@ -32,29 +32,33 @@ export function WizardHeader({ currentStep, totalSteps, title, onBack }: WizardH
     );
   };
 
-  const progressPercentage = (currentStep / totalSteps) * 100;
+  const isFirstStep = currentStep === 1;
 
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
-        {onBack && (
-          <TouchableOpacity style={styles.backButton} onPress={onBack}>
-            <Text style={styles.backButtonText}>← Back</Text>
+        {isFirstStep ? (
+          <TouchableOpacity style={styles.closeButton} onPress={handleCancel}>
+            <Text style={styles.closeIcon}>✕</Text>
           </TouchableOpacity>
+        ) : (
+          <>
+            {onBack && (
+              <TouchableOpacity style={styles.backButton} onPress={onBack}>
+                <Text style={styles.backIcon}>←</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.closeButton} onPress={handleCancel}>
+              <Text style={styles.closeIcon}>✕</Text>
+            </TouchableOpacity>
+          </>
         )}
-        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
       </View>
 
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${progressPercentage}%` }]} />
-        </View>
-        <Text style={styles.stepText}>
-          Step {currentStep} of {totalSteps}
-        </Text>
-      </View>
+      {/* Step text */}
+      <Text style={styles.stepText}>
+        STEP {currentStep} OF {totalSteps}
+      </Text>
 
       <Text style={styles.title}>{title}</Text>
     </View>

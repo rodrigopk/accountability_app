@@ -1,60 +1,48 @@
 import { StyleSheet } from 'react-native';
 
+import { colors, spacing, typography } from '../../theme';
+
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.xl,
     paddingTop: 60,
-    paddingBottom: 16,
+    paddingBottom: spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: colors.divider,
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.lg,
   },
   backButton: {
-    padding: 8,
+    padding: spacing.sm,
   },
-  backButtonText: {
-    fontSize: 16,
-    color: '#007AFF',
-    fontWeight: '500',
+  backIcon: {
+    fontSize: typography.fontSize.xl,
+    color: colors.textPrimary,
   },
-  cancelButton: {
-    padding: 8,
-    marginLeft: 'auto',
+  closeButton: {
+    padding: spacing.sm,
   },
-  cancelButtonText: {
-    fontSize: 16,
-    color: '#ff3b30',
-    fontWeight: '500',
-  },
-  progressContainer: {
-    marginBottom: 16,
-  },
-  progressBar: {
-    height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 2,
-    overflow: 'hidden',
-    marginBottom: 8,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#007AFF',
-    borderRadius: 2,
+  closeIcon: {
+    fontSize: typography.fontSize.xl,
+    color: colors.textPrimary,
   },
   stepText: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.medium,
+    color: colors.textSecondary,
+    textTransform: 'uppercase',
     textAlign: 'center',
+    marginBottom: spacing.lg,
+    letterSpacing: 0.5,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#333',
+    fontSize: typography.fontSize.xxxl,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
   },
 });
