@@ -12,6 +12,7 @@ export interface CreateRoundInput {
 export interface CreateGoalInput {
   title: string;
   description?: string;
+  emoji?: string;
   frequency: GoalFrequency;
   durationSeconds: number;
 }
@@ -27,6 +28,7 @@ export interface UpdateRoundInput {
 export interface UpdateGoalInput {
   title?: string;
   description?: string;
+  emoji?: string;
   frequency?: GoalFrequency;
   durationSeconds?: number;
 }
