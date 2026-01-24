@@ -4,10 +4,16 @@ import { StorageAdapter } from '../StorageAdapter';
 
 describe('StorageAdapter', () => {
   let adapter: StorageAdapter;
+  let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
     adapter = new StorageAdapter();
     jest.clearAllMocks();
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   describe('get', () => {
@@ -29,12 +35,17 @@ describe('StorageAdapter', () => {
       expect(result).toBeNull();
     });
 
-    it('should return null on error', async () => {
-      (AsyncStorage.getItem as jest.Mock).mockRejectedValue(new Error('Storage error'));
+    it('should return null on error and log the error', async () => {
+      const storageError = new Error('Storage error');
+      (AsyncStorage.getItem as jest.Mock).mockRejectedValue(storageError);
 
       const result = await adapter.get('error-key');
 
       expect(result).toBeNull();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error reading from storage key "error-key":',
+        storageError,
+      );
     });
   });
 
@@ -48,10 +59,15 @@ describe('StorageAdapter', () => {
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('test-key', JSON.stringify(testData));
     });
 
-    it('should throw on error', async () => {
-      (AsyncStorage.setItem as jest.Mock).mockRejectedValue(new Error('Storage error'));
+    it('should throw on error and log the error', async () => {
+      const storageError = new Error('Storage error');
+      (AsyncStorage.setItem as jest.Mock).mockRejectedValue(storageError);
 
       await expect(adapter.set('error-key', 'value')).rejects.toThrow('Storage error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error writing to storage key "error-key":',
+        storageError,
+      );
     });
   });
 
@@ -64,10 +80,15 @@ describe('StorageAdapter', () => {
       expect(AsyncStorage.removeItem).toHaveBeenCalledWith('test-key');
     });
 
-    it('should throw on error', async () => {
-      (AsyncStorage.removeItem as jest.Mock).mockRejectedValue(new Error('Storage error'));
+    it('should throw on error and log the error', async () => {
+      const storageError = new Error('Storage error');
+      (AsyncStorage.removeItem as jest.Mock).mockRejectedValue(storageError);
 
       await expect(adapter.delete('error-key')).rejects.toThrow('Storage error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error deleting storage key "error-key":',
+        storageError,
+      );
     });
   });
 
@@ -104,12 +125,17 @@ describe('StorageAdapter', () => {
       expect(result).toEqual([]);
     });
 
-    it('should return nulls on error', async () => {
-      (AsyncStorage.multiGet as jest.Mock).mockRejectedValue(new Error('Storage error'));
+    it('should return nulls on error and log the error', async () => {
+      const storageError = new Error('Storage error');
+      (AsyncStorage.multiGet as jest.Mock).mockRejectedValue(storageError);
 
       const result = await adapter.multiGet(['key1', 'key2']);
 
       expect(result).toEqual([null, null]);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error reading multiple keys from storage:',
+        storageError,
+      );
     });
   });
 
@@ -134,10 +160,15 @@ describe('StorageAdapter', () => {
       expect(AsyncStorage.multiSet).not.toHaveBeenCalled();
     });
 
-    it('should throw on error', async () => {
-      (AsyncStorage.multiSet as jest.Mock).mockRejectedValue(new Error('Storage error'));
+    it('should throw on error and log the error', async () => {
+      const storageError = new Error('Storage error');
+      (AsyncStorage.multiSet as jest.Mock).mockRejectedValue(storageError);
 
       await expect(adapter.multiSet([['key', 'value']])).rejects.toThrow('Storage error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error writing multiple keys to storage:',
+        storageError,
+      );
     });
   });
 
@@ -156,10 +187,15 @@ describe('StorageAdapter', () => {
       expect(AsyncStorage.multiRemove).not.toHaveBeenCalled();
     });
 
-    it('should throw on error', async () => {
-      (AsyncStorage.multiRemove as jest.Mock).mockRejectedValue(new Error('Storage error'));
+    it('should throw on error and log the error', async () => {
+      const storageError = new Error('Storage error');
+      (AsyncStorage.multiRemove as jest.Mock).mockRejectedValue(storageError);
 
       await expect(adapter.multiDelete(['key'])).rejects.toThrow('Storage error');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error deleting multiple keys from storage:',
+        storageError,
+      );
     });
   });
 });
