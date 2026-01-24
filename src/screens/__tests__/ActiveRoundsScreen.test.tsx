@@ -17,6 +17,9 @@ jest.mock('../../navigation/useAppNavigation', () => ({
   useOnScreenFocus: jest.fn(),
 }));
 
+// Mock react-native-safe-area-context (shared mock)
+jest.mock('react-native-safe-area-context');
+
 describe('ActiveRoundsScreen', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -62,5 +65,83 @@ describe('ActiveRoundsScreen', () => {
     render(<ActiveRoundsScreen />);
 
     expect(screen.getByText(/Network error/i)).toBeTruthy();
+  });
+
+  it('displays app name', async () => {
+    (useActiveRounds as jest.Mock).mockReturnValue({
+      rounds: [
+        {
+          id: 'round-1',
+          deviceId: 'device-123',
+          startDate: '2026-01-01',
+          endDate: '2026-01-31',
+          goals: [],
+          reward: 'Test Reward',
+          punishment: '',
+          createdAt: '2026-01-01T00:00:00Z',
+          updatedAt: '2026-01-01T00:00:00Z',
+        },
+      ],
+      progressSummaries: new Map(),
+      loading: false,
+      error: null,
+      refresh: jest.fn(),
+    });
+
+    render(<ActiveRoundsScreen />);
+
+    expect(await screen.findByText('Commit')).toBeTruthy();
+  });
+
+  it('displays screen title', async () => {
+    (useActiveRounds as jest.Mock).mockReturnValue({
+      rounds: [
+        {
+          id: 'round-1',
+          deviceId: 'device-123',
+          startDate: '2026-01-01',
+          endDate: '2026-01-31',
+          goals: [],
+          reward: 'Test Reward',
+          punishment: '',
+          createdAt: '2026-01-01T00:00:00Z',
+          updatedAt: '2026-01-01T00:00:00Z',
+        },
+      ],
+      progressSummaries: new Map(),
+      loading: false,
+      error: null,
+      refresh: jest.fn(),
+    });
+
+    render(<ActiveRoundsScreen />);
+
+    expect(await screen.findByText('Active Rounds')).toBeTruthy();
+  });
+
+  it('displays screen subtitle', async () => {
+    (useActiveRounds as jest.Mock).mockReturnValue({
+      rounds: [
+        {
+          id: 'round-1',
+          deviceId: 'device-123',
+          startDate: '2026-01-01',
+          endDate: '2026-01-31',
+          goals: [],
+          reward: 'Test Reward',
+          punishment: '',
+          createdAt: '2026-01-01T00:00:00Z',
+          updatedAt: '2026-01-01T00:00:00Z',
+        },
+      ],
+      progressSummaries: new Map(),
+      loading: false,
+      error: null,
+      refresh: jest.fn(),
+    });
+
+    render(<ActiveRoundsScreen />);
+
+    expect(await screen.findByText(/Track your progress and stay accountable/i)).toBeTruthy();
   });
 });

@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,6 +7,9 @@ import { EmptyState } from '../components/EmptyState';
 import { RoundCard } from '../components/RoundCard';
 import { useAppNavigation, useOnScreenFocus } from '../navigation/useAppNavigation';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
+import { colors } from '../theme';
+
+import { styles } from './ActiveRoundsScreen.styles';
 
 /**
  * Screen component displaying all active accountability rounds
@@ -45,7 +41,7 @@ export function ActiveRoundsScreen() {
   if (loading) {
     return (
       <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-        <ActivityIndicator size="large" color="#007AFF" testID="loading-indicator" />
+        <ActivityIndicator size="large" color={colors.primary} testID="loading-indicator" />
         <Text style={styles.loadingText}>Loading rounds...</Text>
       </View>
     );
@@ -68,6 +64,22 @@ export function ActiveRoundsScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+      {/* App Header */}
+      <View style={styles.appHeader}>
+        <View style={styles.logoContainer}>
+          <View style={styles.logoPlaceholder}>
+            <Text style={styles.logoIcon}>🎯</Text>
+          </View>
+          <Text style={styles.appName}>Commit</Text>
+        </View>
+      </View>
+
+      {/* Title Section */}
+      <View style={styles.titleSection}>
+        <Text style={styles.screenTitle}>Active Rounds</Text>
+        <Text style={styles.screenSubtitle}>Track your progress and stay accountable.</Text>
+      </View>
+
       <FlatList
         data={rounds}
         keyExtractor={item => item.id}
@@ -91,52 +103,3 @@ export function ActiveRoundsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  listContent: {
-    paddingTop: 16,
-    paddingBottom: 16,
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#666',
-  },
-  errorText: {
-    fontSize: 16,
-    color: '#ff0000',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  retryText: {
-    fontSize: 14,
-    color: '#007AFF',
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-  },
-  fab: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#007AFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  fabIcon: {
-    fontSize: 32,
-    color: '#fff',
-    fontWeight: '300',
-  },
-});

@@ -10,9 +10,8 @@ jest.mock('react-native-device-info', () => ({
   getBuildNumber: () => '2405',
 }));
 
-jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
-}));
+// Mock react-native-safe-area-context (shared mock)
+jest.mock('react-native-safe-area-context');
 
 describe('SettingsScreen', () => {
   beforeEach(() => {
