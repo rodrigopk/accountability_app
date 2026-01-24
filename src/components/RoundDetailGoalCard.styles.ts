@@ -1,140 +1,114 @@
 import { StyleSheet } from 'react-native';
 
+import { colors, spacing, typography, borderRadius, shadows } from '../theme';
+
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
-    marginHorizontal: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    marginHorizontal: spacing.lg,
+    ...shadows.md,
+  },
+  contentRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  emojiAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: borderRadius.md,
+    backgroundColor: colors.primaryLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emoji: {
+    fontSize: typography.fontSize.xxl,
+  },
+  infoColumn: {
+    flex: 1,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000',
-    marginBottom: 8,
+    fontSize: typography.fontSize.xl,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
+    marginBottom: spacing.xs,
   },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-    lineHeight: 20,
+  subtitle: {
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
+    marginBottom: spacing.md,
   },
-  detailRow: {
+  progressRow: {
     flexDirection: 'row',
-    marginBottom: 8,
-  },
-  label: {
-    fontSize: 14,
-    color: '#666',
-    marginRight: 8,
-    fontWeight: '500',
-  },
-  value: {
-    fontSize: 14,
-    color: '#000',
-  },
-  progressContainer: {
-    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 12,
-    marginBottom: 12,
+    marginBottom: spacing.xs,
+  },
+  progressLabel: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
+  },
+  progressValue: {
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textPrimary,
   },
   progressBar: {
-    flex: 1,
     height: 8,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 4,
+    backgroundColor: colors.progressBackground,
+    borderRadius: borderRadius.sm,
     overflow: 'hidden',
-    marginRight: 8,
+    marginBottom: spacing.xs,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#4CAF50',
-    borderRadius: 4,
+    backgroundColor: colors.progressFill,
+    borderRadius: borderRadius.sm,
   },
-  progressText: {
-    fontSize: 12,
-    color: '#666',
-    minWidth: 80,
-    textAlign: 'right',
-  },
-  logButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  logButtonFlex: {
-    flex: 1,
-  },
-  logButtonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  logButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  logButtonTextDisabled: {
-    color: '#999',
+  missedWarning: {
+    fontSize: typography.fontSize.sm,
+    color: colors.warning,
+    marginTop: spacing.xs,
   },
   buttonRow: {
     flexDirection: 'row',
-    gap: 8,
-    marginTop: 8,
+    gap: spacing.sm,
   },
   amendButton: {
-    backgroundColor: '#FF9800',
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-    flex: 1,
-  },
-  amendButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 4,
+    justifyContent: 'center',
+    backgroundColor: colors.warning,
+    borderRadius: borderRadius.md,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    gap: spacing.xs,
   },
-  statusIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 6,
+  amendButtonIcon: {
+    fontSize: typography.fontSize.md,
   },
-  statusCompleted: {
-    backgroundColor: '#4CAF50',
+  amendButtonText: {
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textInverse,
   },
-  statusFailed: {
-    backgroundColor: '#F44336',
+  logButton: {
+    flex: 1,
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.md,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  statusPending: {
-    backgroundColor: '#FF9800',
+  logButtonDisabled: {
+    backgroundColor: colors.textTertiary,
   },
-  statusText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  failedCount: {
-    fontSize: 12,
-    color: '#F44336',
-    marginTop: 4,
+  logButtonText: {
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textInverse,
   },
 });
