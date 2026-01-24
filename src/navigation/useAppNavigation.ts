@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useRef } from 'react';
 
-import { NavigationService, RoundDetailParams, WizardScreenName } from './NavigationService';
+import { NavigationService, RoundDetailParams, ScreenName } from './NavigationService';
 import { rnnNavigationService } from './RNNNavigationService';
 
 // Singleton navigation service - using RNN implementation
@@ -51,18 +51,13 @@ export function useAppNavigation() {
   }, []);
 
   const openCreateWizard = useCallback(() => {
-    navigationService.showWizard();
-  }, []);
-
-  const closeWizard = useCallback(() => {
-    navigationService.dismissWizard();
+    navigationService.push('PeriodStep');
   }, []);
 
   return {
     goToRoundDetail,
     goBack,
     openCreateWizard,
-    closeWizard,
   };
 }
 
@@ -71,16 +66,16 @@ export function useAppNavigation() {
  * Uses the navigation service which works with both React Navigation and RNN.
  */
 export function useWizardNavigation() {
-  const goToWizardStep = useCallback((step: WizardScreenName) => {
-    navigationService.pushWizardStep(step);
+  const goToWizardStep = useCallback((step: ScreenName) => {
+    navigationService.push(step);
   }, []);
 
   const goBackWizard = useCallback(() => {
-    navigationService.popWizardStep();
+    navigationService.pop();
   }, []);
 
   const closeWizard = useCallback(() => {
-    navigationService.dismissWizard();
+    navigationService.popToRoot();
   }, []);
 
   return {

@@ -14,33 +14,6 @@ export const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: spacing.lg,
   },
-  screenHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.xl,
-    paddingVertical: spacing.lg,
-    backgroundColor: colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.divider,
-  },
-  backButton: {
-    padding: spacing.sm,
-  },
-  backArrow: {
-    fontSize: typography.fontSize.xl,
-    color: colors.textPrimary,
-  },
-  screenTitle: {
-    fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.semibold,
-    color: colors.textPrimary,
-    flex: 1,
-    textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
-  },
   roundInfoSection: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,

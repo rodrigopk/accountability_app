@@ -7,10 +7,6 @@
 export type RootStackParamList = {
   Main: undefined;
   RoundDetail: { roundId: string };
-};
-
-// Wizard stack screen names
-export type CreateRoundStackParamList = {
   PeriodStep: undefined;
   GoalsStep: undefined;
   RewardPunishmentStep: undefined;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import { WizardHeader } from '../../components/wizard/WizardHeader';
-import { WizardScreenName } from '../../navigation/NavigationService';
+import { ScreenName } from '../../navigation/NavigationService';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useDeviceInfo } from '../../providers/DeviceInfoProvider';
 import { CreateRoundService } from '../../services/round/CreateRoundService';
@@ -52,7 +52,7 @@ export function SummaryStepScreen() {
       await reset();
 
       // Navigate to root - ActiveRoundsScreen will refresh via useOnScreenFocus
-      // when it comes back into focus after the modal is dismissed
+      // when it comes back into focus after returning to the stack root
       closeWizard();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create round');
@@ -61,7 +61,7 @@ export function SummaryStepScreen() {
     }
   };
 
-  const navigateToStep = (step: WizardScreenName) => {
+  const navigateToStep = (step: ScreenName) => {
     goToWizardStep(step);
   };
 

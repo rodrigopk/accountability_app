@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RoundDetailGoalCard } from '../components/RoundDetailGoalCard';
+import { ScreenHeader } from '../components/ScreenHeader';
 import { useAppNavigation } from '../navigation/useAppNavigation';
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 import { LogProgressService } from '../services/progress/LogProgressService';
@@ -154,14 +155,8 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
 
   if (!round) {
     return (
-      <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-        <View style={styles.screenHeader}>
-          <TouchableOpacity style={styles.backButton} onPress={goBack}>
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
-          <Text style={styles.screenTitle}>Round Details</Text>
-          <View style={styles.headerSpacer} />
-        </View>
+      <View style={[styles.safeArea, { paddingBottom: insets.bottom }]}>
+        <ScreenHeader title="Round Details" onBack={goBack} />
         <View style={styles.container}>
           <Text style={styles.errorText}>Round not found</Text>
         </View>
@@ -171,21 +166,13 @@ export function RoundDetailScreen({ roundId }: RoundDetailScreenProps) {
 
   return (
     <>
-      <View style={[styles.safeArea, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+      <View style={[styles.safeArea, { paddingBottom: insets.bottom }]}>
+        <ScreenHeader title="Round Details" onBack={goBack} />
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.scrollContent}
           contentInsetAdjustmentBehavior="automatic"
         >
-          {/* Screen Header */}
-          <View style={styles.screenHeader}>
-            <TouchableOpacity style={styles.backButton} onPress={goBack}>
-              <Text style={styles.backArrow}>←</Text>
-            </TouchableOpacity>
-            <Text style={styles.screenTitle}>Round Details</Text>
-            <View style={styles.headerSpacer} />
-          </View>
-
           {/* Round Info Section */}
           <View style={styles.roundInfoSection}>
             <Text style={styles.roundTitle}>{round.reward}</Text>

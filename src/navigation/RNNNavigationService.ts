@@ -64,47 +64,6 @@ export const rnnNavigationService: NavigationService = {
     Navigation.dismissModal(currentComponentId);
   },
 
-  showWizard() {
-    Navigation.showModal({
-      stack: {
-        children: [
-          {
-            component: {
-              name: 'PeriodStep',
-              options: {
-                topBar: { visible: false },
-              },
-            },
-          },
-        ],
-        options: {
-          topBar: { visible: false },
-        },
-      },
-    });
-  },
-
-  dismissWizard() {
-    Navigation.dismissAllModals();
-  },
-
-  pushWizardStep(step: string) {
-    if (!currentComponentId) return;
-    Navigation.push(currentComponentId, {
-      component: {
-        name: step,
-        options: {
-          topBar: { visible: false },
-        },
-      },
-    });
-  },
-
-  popWizardStep() {
-    if (!currentComponentId) return;
-    Navigation.pop(currentComponentId);
-  },
-
   onScreenFocus(callback: () => void) {
     const subscription = Navigation.events().registerComponentDidAppearListener(
       ({ componentId }) => {
