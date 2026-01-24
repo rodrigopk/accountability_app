@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
@@ -10,9 +10,16 @@ interface WizardHeaderProps {
   totalSteps: number;
   title: string;
   onBack?: () => void;
+  rightButton?: ReactNode;
 }
 
-export function WizardHeader({ currentStep, totalSteps, title, onBack }: WizardHeaderProps) {
+export function WizardHeader({
+  currentStep,
+  totalSteps,
+  title,
+  onBack,
+  rightButton,
+}: WizardHeaderProps) {
   const { closeWizard } = useWizardNavigation();
 
   const handleCancel = () => {
@@ -48,9 +55,14 @@ export function WizardHeader({ currentStep, totalSteps, title, onBack }: WizardH
                 <Text style={styles.backIcon}>←</Text>
               </TouchableOpacity>
             )}
-            <TouchableOpacity style={styles.closeButton} onPress={handleCancel}>
-              <Text style={styles.closeIcon}>✕</Text>
-            </TouchableOpacity>
+            <View style={styles.spacer} />
+            {rightButton ? (
+              <View style={styles.rightButtonContainer}>{rightButton}</View>
+            ) : (
+              <TouchableOpacity style={styles.closeButton} onPress={handleCancel}>
+                <Text style={styles.closeIcon}>✕</Text>
+              </TouchableOpacity>
+            )}
           </>
         )}
       </View>

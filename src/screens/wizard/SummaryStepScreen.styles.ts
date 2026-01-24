@@ -1,117 +1,127 @@
 import { StyleSheet } from 'react-native';
 
+import { colors, spacing, typography, borderRadius } from '../../theme';
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   content: {
     flex: 1,
   },
   scrollContent: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 24,
-    lineHeight: 20,
+    padding: spacing.xl,
   },
   section: {
-    backgroundColor: '#f9f9f9',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.lg,
+    overflow: 'hidden',
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    backgroundColor: colors.primaryLight,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
-  sectionLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
+  sectionHeaderText: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
-  editText: {
-    fontSize: 14,
-    color: '#007AFF',
-    fontWeight: '500',
+  editLink: {
+    fontSize: typography.fontSize.sm,
+    color: colors.primary,
+    fontWeight: typography.fontWeight.semibold,
   },
-  sectionValue: {
-    fontSize: 15,
-    color: '#666',
+  sectionContent: {
+    padding: spacing.lg,
+  },
+  dateRange: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textPrimary,
+    marginBottom: spacing.xs,
+  },
+  duration: {
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
   },
   goalItem: {
-    marginBottom: 12,
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+  },
+  goalNumber: {
+    width: 24,
+    height: 24,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.primary,
+    color: colors.textInverse,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    textAlign: 'center',
+    lineHeight: 24,
+    marginRight: spacing.md,
+  },
+  goalContent: {
+    flex: 1,
+  },
+  goalTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.xs,
+  },
+  goalEmoji: {
+    fontSize: typography.fontSize.lg,
+    marginRight: spacing.xs,
   },
   goalTitle: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: '#333',
-    marginBottom: 4,
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textPrimary,
   },
   goalDetail: {
-    fontSize: 13,
-    color: '#666',
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
   },
   rewardPunishmentItem: {
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   rpLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#555',
-    marginBottom: 4,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
   },
   rpValue: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 20,
+    fontSize: typography.fontSize.md,
+    color: colors.textPrimary,
+    lineHeight: typography.fontSize.md * 1.5,
   },
   errorContainer: {
-    backgroundColor: '#ffebee',
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 8,
+    backgroundColor: colors.dangerLight,
+    padding: spacing.lg,
+    borderRadius: borderRadius.md,
+    marginTop: spacing.sm,
   },
   errorText: {
-    color: '#c62828',
-    fontSize: 14,
-    marginBottom: 8,
+    color: colors.danger,
+    fontSize: typography.fontSize.md,
+    marginBottom: spacing.sm,
   },
   dismissText: {
-    color: '#007AFF',
-    fontSize: 14,
-    fontWeight: '500',
+    color: colors.primary,
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
   },
-  footer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    backgroundColor: '#fff',
-  },
-  createButton: {
-    backgroundColor: '#34C759',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  createButtonDisabled: {
-    opacity: 0.5,
-  },
-  createButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+  saveButtonText: {
+    color: colors.primary,
+    fontSize: typography.fontSize.md,
+    fontWeight: typography.fontWeight.semibold,
   },
 });

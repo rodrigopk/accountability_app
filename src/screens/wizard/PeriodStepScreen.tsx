@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { PeriodPicker } from '../../components/PeriodPicker';
+import { CalendarRangePicker } from '../../components/CalendarRangePicker';
 import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useWizardStore } from '../../stores/useWizardStore';
+import { colors, spacing, typography } from '../../theme';
 import { MILLISECONDS_PER_WEEK } from '../../utils/timeConstants';
 
 export function PeriodStepScreen() {
@@ -30,18 +31,22 @@ export function PeriodStepScreen() {
       <WizardHeader currentStep={1} totalSteps={4} title="Set Period" />
 
       <View style={styles.content}>
-        <Text style={styles.label}>Select Period</Text>
-        <PeriodPicker
+        <Text style={styles.subtitle}>
+          Choose the start and end dates for your accountability round.
+        </Text>
+
+        <View style={styles.dateLabelsRow}>
+          <Text style={styles.dateLabel}>Start Date</Text>
+          <Text style={styles.dateLabel}>End Date</Text>
+        </View>
+
+        <CalendarRangePicker
           startDate={startDate}
           endDate={endDate}
           onStartDateChange={setStartDate}
           onEndDateChange={setEndDate}
-          minimumStartDate={new Date()}
+          minimumDate={new Date()}
         />
-
-        <Text style={styles.helperText}>
-          Select the period for your accountability round. We recommend at least 7 days.
-        </Text>
       </View>
 
       <WizardFooter onNext={handleNext} nextEnabled={isValid} nextLabel="Next" />
@@ -52,23 +57,28 @@ export function PeriodStepScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: spacing.xl,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 20,
-    marginBottom: 8,
-    color: '#333',
+  subtitle: {
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
+    marginBottom: spacing.lg,
+    lineHeight: typography.fontSize.md * 1.5,
   },
-  helperText: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 16,
-    lineHeight: 20,
+  dateLabelsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  dateLabel: {
+    flex: 1,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.medium,
+    color: colors.textSecondary,
   },
 });

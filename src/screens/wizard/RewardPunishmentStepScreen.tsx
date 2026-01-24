@@ -5,6 +5,7 @@ import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useWizardStore } from '../../stores/useWizardStore';
+import { colors, spacing, typography, borderRadius } from '../../theme';
 
 const MAX_LENGTH = 200;
 
@@ -47,17 +48,22 @@ export function RewardPunishmentStepScreen() {
           you'll face if you don't.
         </Text>
 
-        <Text style={styles.label}>Reward *</Text>
+        <Text style={styles.label}>
+          Reward <Text style={styles.required}>*</Text>
+        </Text>
         <TextInput
           style={[styles.input, styles.textArea]}
           value={reward}
           onChangeText={setReward}
-          placeholder="E.g., Buy that new book, Weekend trip, Special meal..."
-          placeholderTextColor="#999"
+          placeholder="What will you treat yourself to if you succeed? Be specific."
+          placeholderTextColor={colors.textTertiary}
           multiline
           numberOfLines={4}
           maxLength={MAX_LENGTH}
         />
+        <Text style={styles.exampleText}>
+          Example: "Buy those new running shoes" or "Weekend getaway"
+        </Text>
         <Text style={styles.charCount}>
           {reward.length}/{MAX_LENGTH}
         </Text>
@@ -91,49 +97,58 @@ export function RewardPunishmentStepScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: spacing.xl,
   },
   description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 24,
-    lineHeight: 20,
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
+    marginBottom: spacing.xxl,
+    lineHeight: typography.fontSize.md * 1.5,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-    marginTop: 16,
+    fontSize: typography.fontSize.lg,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textPrimary,
+    marginBottom: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  required: {
+    color: colors.danger,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: '#333',
-    backgroundColor: '#fff',
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    fontSize: typography.fontSize.lg,
+    color: colors.textPrimary,
+    backgroundColor: colors.surface,
   },
   textArea: {
     height: 100,
     textAlignVertical: 'top',
   },
+  exampleText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textTertiary,
+    marginTop: spacing.xs,
+    fontStyle: 'italic',
+  },
   charCount: {
-    fontSize: 12,
-    color: '#999',
+    fontSize: typography.fontSize.xs,
+    color: colors.textTertiary,
     textAlign: 'right',
-    marginTop: 4,
+    marginTop: spacing.xs,
   },
   helperText: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 20,
-    lineHeight: 20,
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
+    marginTop: spacing.xl,
+    lineHeight: typography.fontSize.md * 1.5,
     fontStyle: 'italic',
   },
 });

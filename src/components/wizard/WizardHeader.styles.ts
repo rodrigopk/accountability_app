@@ -31,6 +31,12 @@ export const styles = StyleSheet.create({
     fontSize: typography.fontSize.xl,
     color: colors.textPrimary,
   },
+  spacer: {
+    flex: 1,
+  },
+  rightButtonContainer: {
+    alignItems: 'flex-end',
+  },
   stepText: {
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.medium,

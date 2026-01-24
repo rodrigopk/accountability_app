@@ -6,6 +6,7 @@ import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useWizardStore } from '../../stores/useWizardStore';
+import { colors, spacing, typography, borderRadius } from '../../theme';
 
 export function GoalsStepScreen() {
   const { goToWizardStep, goBackWizard } = useWizardNavigation();
@@ -82,7 +83,7 @@ export function GoalsStepScreen() {
         )}
 
         <TouchableOpacity style={styles.addButton} onPress={handleAddGoal}>
-          <Text style={styles.addButtonText}>+ Add Goal</Text>
+          <Text style={styles.addButtonText}>Add Another Goal</Text>
         </TouchableOpacity>
       </View>
 
@@ -94,41 +95,42 @@ export function GoalsStepScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: spacing.xl,
   },
   description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 24,
-    lineHeight: 20,
+    fontSize: typography.fontSize.md,
+    color: colors.textSecondary,
+    marginBottom: spacing.xxl,
+    lineHeight: typography.fontSize.md * 1.5,
   },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: spacing.xxxl,
   },
   emptyText: {
-    fontSize: 16,
-    color: '#999',
+    fontSize: typography.fontSize.lg,
+    color: colors.textTertiary,
   },
   listContent: {
-    paddingBottom: 16,
+    paddingBottom: spacing.lg,
   },
   addButton: {
-    backgroundColor: '#007AFF',
-    padding: 16,
-    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+    borderRadius: borderRadius.md,
+    padding: spacing.lg,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: spacing.lg,
   },
   addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: colors.textSecondary,
+    fontSize: typography.fontSize.md,
   },
 });

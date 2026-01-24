@@ -95,6 +95,43 @@ jest.mock('uuid', () => ({
   v4: jest.fn(() => 'mock-uuid-' + Math.random().toString(36).substring(7)),
 }));
 
+// Mock react-native-calendars
+jest.mock('react-native-calendars', () => {
+  const React = require('react');
+  const { View, TouchableOpacity, Text } = require('react-native');
+
+  const MockCalendar = props => {
+    return React.createElement(
+      View,
+      { testID: props.testID || 'mock-calendar' },
+      React.createElement(
+        TouchableOpacity,
+        {
+          testID: 'calendar-day',
+          onPress: () => {
+            if (props.onDayPress) {
+              const today = new Date();
+              props.onDayPress({
+                dateString: today.toISOString().split('T')[0],
+                day: today.getDate(),
+                month: today.getMonth() + 1,
+                year: today.getFullYear(),
+                timestamp: today.getTime(),
+              });
+            }
+          },
+        },
+        React.createElement(Text, null, 'Mock Calendar Day'),
+      ),
+    );
+  };
+
+  return {
+    __esModule: true,
+    Calendar: MockCalendar,
+  };
+});
+
 // Mock react-native-navigation
 jest.mock('react-native-navigation', () => ({
   Navigation: {

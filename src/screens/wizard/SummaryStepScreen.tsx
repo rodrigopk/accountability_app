@@ -7,8 +7,9 @@ import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useDeviceInfo } from '../../providers/DeviceInfoProvider';
 import { CreateRoundService } from '../../services/round/CreateRoundService';
 import { useWizardStore } from '../../stores/useWizardStore';
-import { formatFrequency } from '../../utils/goalUtils';
+import { formatFrequency, formatDuration } from '../../utils/goalUtils';
 import { formatDateRange } from '../../utils/roundUtils';
+import { MILLISECONDS_PER_DAY } from '../../utils/timeConstants';
 
 import { styles } from './SummaryStepScreen.styles';
 
@@ -39,6 +40,7 @@ export function SummaryStepScreen() {
         goals: goals.map(goal => ({
           title: goal.title,
           description: goal.description,
+          emoji: goal.emoji,
           frequency: goal.frequency,
           durationSeconds: goal.durationSeconds,
         })),
@@ -72,62 +74,88 @@ export function SummaryStepScreen() {
   }
 
   const dateRange = formatDateRange(period.startDate.toISOString(), period.endDate.toISOString());
+  const daysDuration = Math.ceil(
+    (period.endDate.getTime() - period.startDate.getTime()) / MILLISECONDS_PER_DAY,
+  );
 
   return (
     <View style={styles.container}>
-      <WizardHeader currentStep={4} totalSteps={4} title="Review & Confirm" onBack={handleBack} />
+      <WizardHeader
+        currentStep={4}
+        totalSteps={4}
+        title="Review & Confirm"
+        onBack={handleBack}
+        rightButton={
+          <TouchableOpacity onPress={handleCreateRound} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color={styles.saveButtonText.color} />
+            ) : (
+              <Text style={styles.saveButtonText}>Save</Text>
+            )}
+          </TouchableOpacity>
+        }
+      />
 
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.sectionTitle}>Summary</Text>
-        <Text style={styles.description}>
-          Review your accountability round details. Tap any section to edit.
-        </Text>
-
         {/* Period Section */}
-        <TouchableOpacity style={styles.section} onPress={() => navigateToStep('PeriodStep')}>
+        <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionLabel}>Period</Text>
-            <Text style={styles.editText}>Edit</Text>
+            <Text style={styles.sectionHeaderText}>PERIOD</Text>
+            <TouchableOpacity onPress={() => navigateToStep('PeriodStep')}>
+              <Text style={styles.editLink}>Edit</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.sectionValue}>{dateRange}</Text>
-        </TouchableOpacity>
+          <View style={styles.sectionContent}>
+            <Text style={styles.dateRange}>{dateRange}</Text>
+            <Text style={styles.duration}>{daysDuration} days duration</Text>
+          </View>
+        </View>
 
         {/* Goals Section */}
-        <TouchableOpacity style={styles.section} onPress={() => navigateToStep('GoalsStep')}>
+        <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionLabel}>Goals ({goals.length})</Text>
-            <Text style={styles.editText}>Edit</Text>
+            <Text style={styles.sectionHeaderText}>GOALS</Text>
+            <TouchableOpacity onPress={() => navigateToStep('GoalsStep')}>
+              <Text style={styles.editLink}>Edit</Text>
+            </TouchableOpacity>
           </View>
-          {goals.map((goal, index) => (
-            <View key={goal.id} style={styles.goalItem}>
-              <Text style={styles.goalTitle}>
-                {index + 1}. {goal.title}
-              </Text>
-              <Text style={styles.goalDetail}>
-                {formatFrequency(goal.frequency)} • {Math.floor(goal.durationSeconds / 60)} minutes
-              </Text>
-            </View>
-          ))}
-        </TouchableOpacity>
+          <View style={styles.sectionContent}>
+            {goals.map((goal, index) => (
+              <View key={goal.id} style={styles.goalItem}>
+                <Text style={styles.goalNumber}>{index + 1}</Text>
+                <View style={styles.goalContent}>
+                  <View style={styles.goalTitleRow}>
+                    {goal.emoji && <Text style={styles.goalEmoji}>{goal.emoji}</Text>}
+                    <Text style={styles.goalTitle}>{goal.title}</Text>
+                  </View>
+                  <Text style={styles.goalDetail}>
+                    {formatFrequency(goal.frequency)} • {formatDuration(goal.durationSeconds)}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
 
         {/* Reward & Punishment Section */}
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => navigateToStep('RewardPunishmentStep')}
-        >
+        <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionLabel}>Reward & Punishment</Text>
-            <Text style={styles.editText}>Edit</Text>
+            <Text style={styles.sectionHeaderText}>REWARD & PUNISHMENT</Text>
+            <TouchableOpacity onPress={() => navigateToStep('RewardPunishmentStep')}>
+              <Text style={styles.editLink}>Edit</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.rewardPunishmentItem}>
-            <Text style={styles.rpLabel}>Reward:</Text>
-            <Text style={styles.rpValue}>{reward}</Text>
+          <View style={styles.sectionContent}>
+            <View style={styles.rewardPunishmentItem}>
+              <Text style={styles.rpLabel}>Reward:</Text>
+              <Text style={styles.rpValue}>{reward}</Text>
+            </View>
+            <View style={styles.rewardPunishmentItem}>
+              <Text style={styles.rpLabel}>Punishment:</Text>
+              <Text style={styles.rpValue}>{punishment}</Text>
+            </View>
           </View>
-          <View style={styles.rewardPunishmentItem}>
-            <Text style={styles.rpLabel}>Punishment:</Text>
-            <Text style={styles.rpValue}>{punishment}</Text>
-          </View>
-        </TouchableOpacity>
+        </View>
 
         {error && (
           <View style={styles.errorContainer}>
@@ -138,20 +166,6 @@ export function SummaryStepScreen() {
           </View>
         )}
       </ScrollView>
-
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={[styles.createButton, loading && styles.createButtonDisabled]}
-          onPress={handleCreateRound}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.createButtonText}>Create Round</Text>
-          )}
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }

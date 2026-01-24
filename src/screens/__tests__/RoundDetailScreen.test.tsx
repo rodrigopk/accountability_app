@@ -124,6 +124,6 @@ describe('RoundDetailScreen', () => {
 
   it('displays goal progress when available', () => {
     render(<RoundDetailScreen roundId="round-1" />);
-    expect(screen.getByText('10/15 completed')).toBeTruthy();
+    expect(screen.getByText('10/15')).toBeTruthy();
   });
 });

@@ -69,11 +69,31 @@ describe('App initialization', () => {
     expect(Navigation.setRoot).toHaveBeenCalledWith(
       expect.objectContaining({
         root: expect.objectContaining({
-          stack: expect.objectContaining({
+          bottomTabs: expect.objectContaining({
+            id: 'MainTabs',
             children: expect.arrayContaining([
               expect.objectContaining({
-                component: expect.objectContaining({
-                  name: 'Main',
+                stack: expect.objectContaining({
+                  id: 'RoundsStack',
+                  children: expect.arrayContaining([
+                    expect.objectContaining({
+                      component: expect.objectContaining({
+                        name: 'Main',
+                      }),
+                    }),
+                  ]),
+                }),
+              }),
+              expect.objectContaining({
+                stack: expect.objectContaining({
+                  id: 'SettingsStack',
+                  children: expect.arrayContaining([
+                    expect.objectContaining({
+                      component: expect.objectContaining({
+                        name: 'Settings',
+                      }),
+                    }),
+                  ]),
                 }),
               }),
             ]),
