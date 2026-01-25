@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { GoalCard } from '../../components/GoalCard';
-import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
+import { WizardNextButton } from '../../components/wizard/WizardNextButton';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useWizardStore } from '../../stores/useWizardStore';
 import { colors, spacing, typography, borderRadius } from '../../theme';
@@ -44,7 +44,13 @@ export function GoalsStepScreen() {
 
   return (
     <View style={styles.container}>
-      <WizardHeader currentStep={2} totalSteps={4} title="Add Goals" onBack={handleBack} />
+      <WizardHeader
+        currentStep={2}
+        totalSteps={4}
+        title="Add Goals"
+        onBack={handleBack}
+        rightButton={<WizardNextButton onPress={handleNext} disabled={!isStepValid('goals')} />}
+      />
 
       <View style={styles.content}>
         <Text style={styles.description}>
@@ -86,8 +92,6 @@ export function GoalsStepScreen() {
           <Text style={styles.addButtonText}>Add Another Goal</Text>
         </TouchableOpacity>
       </View>
-
-      <WizardFooter onNext={handleNext} nextEnabled={isStepValid('goals')} />
     </View>
   );
 }

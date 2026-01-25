@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { CalendarRangePicker } from '../../components/CalendarRangePicker';
-import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
+import { WizardNextButton } from '../../components/wizard/WizardNextButton';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useWizardStore } from '../../stores/useWizardStore';
 import { colors, spacing, typography } from '../../theme';
@@ -28,7 +28,12 @@ export function PeriodStepScreen() {
 
   return (
     <View style={styles.container}>
-      <WizardHeader currentStep={1} totalSteps={4} title="Set Period" />
+      <WizardHeader
+        currentStep={1}
+        totalSteps={4}
+        title="Set Period"
+        rightButton={<WizardNextButton onPress={handleNext} disabled={!isValid} />}
+      />
 
       <View style={styles.content}>
         <Text style={styles.subtitle}>
@@ -48,8 +53,6 @@ export function PeriodStepScreen() {
           minimumDate={new Date()}
         />
       </View>
-
-      <WizardFooter onNext={handleNext} nextEnabled={isValid} nextLabel="Next" />
     </View>
   );
 }

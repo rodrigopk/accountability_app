@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-import { WizardFooter } from '../../components/wizard/WizardFooter';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
+import { WizardNextButton } from '../../components/wizard/WizardNextButton';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useWizardStore } from '../../stores/useWizardStore';
 import { colors, spacing, typography, borderRadius } from '../../theme';
@@ -40,6 +40,7 @@ export function RewardPunishmentStepScreen() {
         totalSteps={4}
         title="Set Reward & Punishment"
         onBack={handleBack}
+        rightButton={<WizardNextButton onPress={handleNext} disabled={!isValid} />}
       />
 
       <View style={styles.content}>
@@ -88,8 +89,6 @@ export function RewardPunishmentStepScreen() {
           something you want to avoid.
         </Text>
       </View>
-
-      <WizardFooter onNext={handleNext} nextEnabled={isValid} nextLabel="Next" />
     </View>
   );
 }
