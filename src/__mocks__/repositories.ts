@@ -14,6 +14,7 @@ export interface MockStorageAdapter {
   mockMultiGet: jest.Mock;
   mockMultiSet: jest.Mock;
   mockMultiDelete: jest.Mock;
+  mockClear: jest.Mock;
 }
 
 /**
@@ -28,6 +29,7 @@ export function createMockStorageAdapter(): MockStorageAdapter {
   const mockMultiGet = jest.fn();
   const mockMultiSet = jest.fn();
   const mockMultiDelete = jest.fn();
+  const mockClear = jest.fn();
 
   const storage = {
     get: mockGet,
@@ -36,6 +38,7 @@ export function createMockStorageAdapter(): MockStorageAdapter {
     multiGet: mockMultiGet,
     multiSet: mockMultiSet,
     multiDelete: mockMultiDelete,
+    clear: mockClear,
   } as unknown as jest.Mocked<StorageAdapter>;
 
   return {
@@ -46,6 +49,7 @@ export function createMockStorageAdapter(): MockStorageAdapter {
     mockMultiGet,
     mockMultiSet,
     mockMultiDelete,
+    mockClear,
   };
 }
 

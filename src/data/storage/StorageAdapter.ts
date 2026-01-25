@@ -108,4 +108,17 @@ export class StorageAdapter {
       throw error;
     }
   }
+
+  /**
+   * Clear all data from storage
+   * WARNING: This removes ALL stored data permanently
+   */
+  async clear(): Promise<void> {
+    try {
+      await AsyncStorage.clear();
+    } catch (error) {
+      console.error('Error clearing storage:', error);
+      throw error;
+    }
+  }
 }

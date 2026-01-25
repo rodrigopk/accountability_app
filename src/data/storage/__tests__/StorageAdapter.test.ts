@@ -198,4 +198,22 @@ describe('StorageAdapter', () => {
       );
     });
   });
+
+  describe('clear', () => {
+    it('clears all data from storage', async () => {
+      (AsyncStorage.clear as jest.Mock).mockResolvedValue(undefined);
+
+      await adapter.clear();
+
+      expect(AsyncStorage.clear).toHaveBeenCalled();
+    });
+
+    it('throws error when clear fails', async () => {
+      const error = new Error('Clear failed');
+      (AsyncStorage.clear as jest.Mock).mockRejectedValue(error);
+
+      await expect(adapter.clear()).rejects.toThrow('Clear failed');
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error clearing storage:', error);
+    });
+  });
 });

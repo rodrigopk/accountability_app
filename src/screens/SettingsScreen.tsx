@@ -3,12 +3,16 @@ import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { getVersion, getBuildNumber } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useActiveRounds } from '../providers/ActiveRoundsProvider';
+import { ClearAllDataService } from '../services/data/ClearAllDataService';
+
 import { styles } from './SettingsScreen.styles.ts';
 
 export function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const appVersion = getVersion();
   const buildNumber = getBuildNumber();
+  const { refresh } = useActiveRounds();
 
   const handleDeleteAllData = () => {
     Alert.alert(
@@ -19,9 +23,15 @@ export function SettingsScreen() {
         {
           text: 'Delete',
           style: 'destructive',
-          onPress: () => {
-            // Dummy - no functionality for now
-            Alert.alert('Info', 'Delete functionality not implemented yet.');
+          onPress: async () => {
+            try {
+              const service = new ClearAllDataService();
+              await service.execute();
+              await refresh();
+              Alert.alert('Data Deleted', 'All local data has been removed successfully.');
+            } catch {
+              Alert.alert('Error', 'Failed to delete data. Please try again.');
+            }
           },
         },
       ],

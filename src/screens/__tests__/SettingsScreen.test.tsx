@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 
+import { ClearAllDataService } from '../../services/data/ClearAllDataService';
 import { SettingsScreen } from '../SettingsScreen';
 
 jest.spyOn(Alert, 'alert');
@@ -12,6 +13,11 @@ jest.mock('react-native-device-info', () => ({
 
 // Mock react-native-safe-area-context (shared mock)
 jest.mock('react-native-safe-area-context');
+
+jest.mock('../../services/data/ClearAllDataService');
+jest.mock('../../providers/ActiveRoundsProvider', () => ({
+  useActiveRounds: () => ({ refresh: jest.fn().mockResolvedValue(undefined) }),
+}));
 
 describe('SettingsScreen', () => {
   beforeEach(() => {
@@ -52,6 +58,48 @@ describe('SettingsScreen', () => {
         expect.objectContaining({ text: 'Cancel' }),
         expect.objectContaining({ text: 'Delete', style: 'destructive' }),
       ]),
+    );
+  });
+
+  it('calls ClearAllDataService and shows success alert on confirm', async () => {
+    const mockExecute = jest.fn().mockResolvedValue(undefined);
+    (ClearAllDataService as jest.Mock).mockImplementation(() => ({
+      execute: mockExecute,
+    }));
+
+    render(<SettingsScreen />);
+    fireEvent.press(screen.getByTestId('delete-all-data-button'));
+
+    // Get the Delete button callback from Alert.alert
+    const alertCall = (Alert.alert as jest.Mock).mock.calls[0];
+    const deleteButton = alertCall[2].find((btn: { text: string }) => btn.text === 'Delete');
+
+    await deleteButton.onPress();
+
+    expect(mockExecute).toHaveBeenCalled();
+    expect(Alert.alert).toHaveBeenLastCalledWith(
+      'Data Deleted',
+      'All local data has been removed successfully.',
+    );
+  });
+
+  it('shows error alert when deletion fails', async () => {
+    const mockExecute = jest.fn().mockRejectedValue(new Error('Failed'));
+    (ClearAllDataService as jest.Mock).mockImplementation(() => ({
+      execute: mockExecute,
+    }));
+
+    render(<SettingsScreen />);
+    fireEvent.press(screen.getByTestId('delete-all-data-button'));
+
+    const alertCall = (Alert.alert as jest.Mock).mock.calls[0];
+    const deleteButton = alertCall[2].find((btn: { text: string }) => btn.text === 'Delete');
+
+    await deleteButton.onPress();
+
+    expect(Alert.alert).toHaveBeenLastCalledWith(
+      'Error',
+      'Failed to delete data. Please try again.',
     );
   });
 });

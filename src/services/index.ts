@@ -9,3 +9,6 @@ export * from './goal';
 
 // Progress services
 export * from './progress';
+
+// Data services
+export * from './data';
