@@ -1,8 +1,8 @@
 /**
  * Screen registration for React Native Navigation.
- * Each screen is wrapped with providers and componentId tracking.
+ * Each screen is wrapped with providers.
  */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigation } from 'react-native-navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -17,44 +17,24 @@ import { RewardPunishmentStepScreen } from '../screens/wizard/RewardPunishmentSt
 import { SummaryStepScreen } from '../screens/wizard/SummaryStepScreen';
 import { colors } from '../theme';
 
-import { setCurrentComponentId } from './RNNNavigationService';
-
 interface RNNScreenProps {
   componentId: string;
   [key: string]: unknown;
 }
 
 /**
- * HOC to wrap screens with providers and track componentId.
+ * HOC to wrap screens with providers.
  */
 function withProviders<P extends object>(
   Screen: React.ComponentType<P>,
   screenName: string,
 ): React.ComponentType<RNNScreenProps & P> {
   function WrappedScreen(props: RNNScreenProps & P) {
-    const { componentId, ...screenProps } = props;
-
-    useEffect(() => {
-      // Update current componentId when screen appears
-      setCurrentComponentId(componentId);
-
-      // Also listen for when this screen appears (in case of back navigation)
-      const subscription = Navigation.events().registerComponentDidAppearListener(event => {
-        if (event.componentId === componentId) {
-          setCurrentComponentId(componentId);
-        }
-      });
-
-      return () => {
-        subscription.remove();
-      };
-    }, [componentId]);
-
     return (
       <SafeAreaProvider>
         <DeviceInfoProvider>
           <ActiveRoundsProvider>
-            <Screen {...(screenProps as P)} />
+            <Screen {...props} />
           </ActiveRoundsProvider>
         </DeviceInfoProvider>
       </SafeAreaProvider>
