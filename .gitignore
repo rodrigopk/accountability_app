@@ -216,3 +216,6 @@ lerna-debug.log*
 *.properties
 !gradle.properties
 !local.properties.example
+
+# Local Cursor rules (not shared)
+.cursor/rules/planning-agent.mdc
