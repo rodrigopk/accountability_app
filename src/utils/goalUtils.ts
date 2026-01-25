@@ -68,3 +68,18 @@ export function formatDuration(seconds: number): string {
   }
   return `${hours} hr ${minutes} min`;
 }
+
+/**
+ * Format a time string (HH:mm) to a readable 12-hour format
+ * @param time Time in HH:mm format (e.g., "09:00", "14:30")
+ * @returns Formatted time string (e.g., "9:00 AM", "2:30 PM")
+ */
+export function formatNotificationTime(time: string | undefined): string {
+  if (!time) {
+    return '9:00 AM'; // Default fallback
+  }
+  const [hours, minutes] = time.split(':').map(Number);
+  const period = hours >= 12 ? 'PM' : 'AM';
+  const displayHour = hours % 12 || 12;
+  return `${displayHour}:${minutes.toString().padStart(2, '0')} ${period}`;
+}

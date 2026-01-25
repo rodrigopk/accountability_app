@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { GoalProgressSummary } from '../services/types';
 import { Goal } from '../types/Goal';
-import { formatDuration, formatFrequency } from '../utils/goalUtils';
+import { formatDuration, formatFrequency, formatNotificationTime } from '../utils/goalUtils';
 
 import { styles } from './RoundDetailGoalCard.styles';
 
@@ -70,7 +70,8 @@ export function RoundDetailGoalCard({
         <View style={styles.infoColumn}>
           <Text style={styles.title}>{goal.title}</Text>
           <Text style={styles.subtitle}>
-            {formatFrequency(goal.frequency)} • {formatDuration(goal.durationSeconds)}
+            {formatFrequency(goal.frequency)} • {formatDuration(goal.durationSeconds)} • 🔔{' '}
+            {formatNotificationTime(goal.notificationTime || '09:00')}
           </Text>
 
           {/* Weekly progress */}

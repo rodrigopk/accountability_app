@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 
 import { ClearAllDataService } from '../../services/data/ClearAllDataService';
@@ -19,35 +19,69 @@ jest.mock('../../providers/ActiveRoundsProvider', () => ({
   useActiveRounds: () => ({ refresh: jest.fn().mockResolvedValue(undefined) }),
 }));
 
+// Mock the notifications module - Jest will automatically use __mocks__/index.ts
+jest.mock('../../services/notifications');
+
 describe('SettingsScreen', () => {
+  // Suppress React act warnings for async state updates in useEffect
+  // These are expected when testing components with async effects
+  const originalError = console.error;
+  beforeAll(() => {
+    console.error = (...args: unknown[]) => {
+      if (
+        typeof args[0] === 'string' &&
+        args[0].includes('An update to SettingsScreen inside a test was not wrapped in act')
+      ) {
+        return;
+      }
+      originalError.call(console, ...args);
+    };
+  });
+
+  afterAll(() => {
+    console.error = originalError;
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('displays Settings title', () => {
+  it('displays Settings title', async () => {
     render(<SettingsScreen />);
-    expect(screen.getByText('Settings')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Settings')).toBeTruthy();
+    });
   });
 
-  it('displays app version', () => {
+  it('displays app version', async () => {
     render(<SettingsScreen />);
-    expect(screen.getByText('App Version')).toBeTruthy();
-    expect(screen.getByText('1.0.0')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('App Version')).toBeTruthy();
+      expect(screen.getByText('1.0.0')).toBeTruthy();
+    });
   });
 
-  it('displays build number', () => {
+  it('displays build number', async () => {
     render(<SettingsScreen />);
-    expect(screen.getByText('Build Number')).toBeTruthy();
-    expect(screen.getByText('2405')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Build Number')).toBeTruthy();
+      expect(screen.getByText('2405')).toBeTruthy();
+    });
   });
 
-  it('displays Delete All Data button', () => {
+  it('displays Delete All Data button', async () => {
     render(<SettingsScreen />);
-    expect(screen.getByText('Delete All Data')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText('Delete All Data')).toBeTruthy();
+    });
   });
 
-  it('shows confirmation alert when Delete All Data is pressed', () => {
+  it('shows confirmation alert when Delete All Data is pressed', async () => {
     render(<SettingsScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('delete-all-data-button')).toBeTruthy();
+    });
 
     fireEvent.press(screen.getByTestId('delete-all-data-button'));
 
@@ -68,6 +102,11 @@ describe('SettingsScreen', () => {
     }));
 
     render(<SettingsScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('delete-all-data-button')).toBeTruthy();
+    });
+
     fireEvent.press(screen.getByTestId('delete-all-data-button'));
 
     // Get the Delete button callback from Alert.alert
@@ -90,6 +129,11 @@ describe('SettingsScreen', () => {
     }));
 
     render(<SettingsScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('delete-all-data-button')).toBeTruthy();
+    });
+
     fireEvent.press(screen.getByTestId('delete-all-data-button'));
 
     const alertCall = (Alert.alert as jest.Mock).mock.calls[0];

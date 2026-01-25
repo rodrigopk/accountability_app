@@ -20,6 +20,7 @@ describe('GoalCard', () => {
     description: 'Morning workout',
     frequency: { type: 'daily' },
     durationSeconds: 1800,
+    notificationTime: '09:00',
   };
 
   const newGoal: Goal = {
@@ -27,6 +28,7 @@ describe('GoalCard', () => {
     title: '',
     frequency: { type: 'daily' },
     durationSeconds: 0,
+    notificationTime: '09:00',
   };
 
   beforeEach(() => {
@@ -93,17 +95,25 @@ describe('GoalCard', () => {
       expect(screen.getByText('30 min')).toBeTruthy();
     });
 
+    it('displays notification time in show mode', () => {
+      render(<GoalCard goal={completedGoal} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
+
+      expect(screen.getByText('Reminder:')).toBeTruthy();
+      expect(screen.getByText('9:00 AM')).toBeTruthy();
+    });
+
     it('displays description in show mode when present', () => {
       render(<GoalCard goal={completedGoal} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
 
       expect(screen.getByText('Morning workout')).toBeTruthy();
     });
 
-    it('displays frequency and duration labels in show mode', () => {
+    it('displays frequency, duration, and reminder labels in show mode', () => {
       render(<GoalCard goal={completedGoal} onUpdate={mockOnUpdate} onRemove={mockOnRemove} />);
 
       expect(screen.getByText('Frequency:')).toBeTruthy();
       expect(screen.getByText('Duration:')).toBeTruthy();
+      expect(screen.getByText('Reminder:')).toBeTruthy();
     });
 
     it('shows Remove Goal button only in edit mode', () => {

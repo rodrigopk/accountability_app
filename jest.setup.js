@@ -155,3 +155,26 @@ jest.mock('react-native-navigation', () => ({
     setStackRoot: jest.fn(),
   },
 }));
+
+// Mock react-native-push-notification
+jest.mock('react-native-push-notification', () => {
+  const mockPushNotification = {
+    configure: jest.fn(),
+    createChannel: jest.fn((channel, callback) => {
+      if (callback) callback();
+    }),
+    localNotificationSchedule: jest.fn(),
+    cancelLocalNotification: jest.fn(),
+    cancelAllLocalNotifications: jest.fn(),
+    getScheduledLocalNotifications: jest.fn(callback => {
+      if (callback) callback([]);
+    }),
+    checkPermissions: jest.fn(callback => {
+      if (callback) callback({ alert: true, badge: true, sound: true });
+    }),
+  };
+  return {
+    __esModule: true,
+    default: mockPushNotification,
+  };
+});

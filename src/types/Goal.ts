@@ -19,4 +19,7 @@ export interface Goal {
   emoji?: string;
   frequency: GoalFrequency;
   durationSeconds: number;
+  notificationTime: string; // HH:mm format, e.g., "09:00"
 }
+
+export const DEFAULT_NOTIFICATION_TIME = '09:00';

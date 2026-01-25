@@ -44,6 +44,7 @@ describe('RoundDetailScreen', () => {
         description: 'Morning workout',
         frequency: { type: 'daily' },
         durationSeconds: 1800,
+        notificationTime: '09:00',
       },
     ],
     reward: 'Buy new shoes',

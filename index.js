@@ -11,6 +11,7 @@ import { Navigation } from 'react-native-navigation';
 import { registerScreens, setDefaultOptions, setRoot } from './src/navigation/registerScreens';
 import { rnnNavigationService, setCurrentComponentId } from './src/navigation/RNNNavigationService';
 import { setNavigationService } from './src/navigation/useAppNavigation';
+import { createNotificationProvider, NotificationService } from './src/services/notifications';
 
 // Set RNN as the navigation service
 setNavigationService(rnnNavigationService, true);
@@ -25,6 +26,15 @@ try {
 
 // Set default options for all screens
 setDefaultOptions();
+
+// Initialize notifications
+const notificationProvider = createNotificationProvider();
+const notificationService = new NotificationService(notificationProvider);
+notificationService.initialize().then(granted => {
+  if (!granted) {
+    console.log('Notification permission not granted');
+  }
+});
 
 // Launch app when ready - must use registerAppLaunchedListener for RNN v7
 Navigation.events().registerAppLaunchedListener(() => {

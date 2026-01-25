@@ -5,6 +5,7 @@ import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { ScreenName } from '../../navigation/NavigationService';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
 import { useDeviceInfo } from '../../providers/DeviceInfoProvider';
+import { createNotificationProvider } from '../../services/notifications';
 import { CreateRoundService } from '../../services/round/CreateRoundService';
 import { useWizardStore } from '../../stores/useWizardStore';
 import { formatFrequency, formatDuration } from '../../utils/goalUtils';
@@ -31,7 +32,8 @@ export function SummaryStepScreen() {
     setError(null);
 
     try {
-      const createRoundService = new CreateRoundService();
+      const notificationProvider = createNotificationProvider();
+      const createRoundService = new CreateRoundService(undefined, notificationProvider);
 
       await createRoundService.execute({
         deviceId: deviceInfo.id,
@@ -43,6 +45,7 @@ export function SummaryStepScreen() {
           emoji: goal.emoji,
           frequency: goal.frequency,
           durationSeconds: goal.durationSeconds,
+          notificationTime: goal.notificationTime,
         })),
         reward,
         punishment,

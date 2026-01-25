@@ -76,4 +76,22 @@ export const styles = StyleSheet.create({
     marginTop: spacing.sm,
     lineHeight: Math.round(typography.fontSize.md * 1.5),
   },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statusText: {
+    fontSize: typography.fontSize.md,
+    marginRight: spacing.xs,
+  },
+  statusEnabled: {
+    color: colors.success,
+  },
+  statusDisabled: {
+    color: colors.warning,
+  },
+  chevron: {
+    fontSize: typography.fontSize.xl,
+    color: colors.textTertiary,
+  },
 });

@@ -1,18 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { getVersion, getBuildNumber } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useActiveRounds } from '../providers/ActiveRoundsProvider';
 import { ClearAllDataService } from '../services/data/ClearAllDataService';
+import { createNotificationProvider } from '../services/notifications';
 
-import { styles } from './SettingsScreen.styles.ts';
+import { styles } from './SettingsScreen.styles';
 
 export function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const appVersion = getVersion();
   const buildNumber = getBuildNumber();
   const { refresh } = useActiveRounds();
+  const [notificationsEnabled, setNotificationsEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkPermissions = async () => {
+      const provider = createNotificationProvider();
+      const hasPermission = await provider.hasPermission();
+      setNotificationsEnabled(hasPermission);
+    };
+    checkPermissions();
+  }, []);
+
+  const handleNotificationSettings = async () => {
+    const provider = createNotificationProvider();
+    await provider.openSettings();
+    // Recheck permissions after returning from settings
+    setTimeout(async () => {
+      const hasPermission = await provider.hasPermission();
+      setNotificationsEnabled(hasPermission);
+    }, 500);
+  };
 
   const handleDeleteAllData = () => {
     Alert.alert(
@@ -57,6 +78,35 @@ export function SettingsScreen() {
             <Text style={styles.rowValue}>{buildNumber}</Text>
           </View>
         </View>
+
+        <Text style={styles.sectionTitle}>NOTIFICATIONS</Text>
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.row}
+            onPress={handleNotificationSettings}
+            testID="notification-settings-button"
+          >
+            <Text style={styles.rowLabel}>Notifications</Text>
+            <View style={styles.statusContainer}>
+              <Text
+                style={[
+                  styles.statusText,
+                  notificationsEnabled ? styles.statusEnabled : styles.statusDisabled,
+                ]}
+              >
+                {notificationsEnabled === null
+                  ? 'Checking...'
+                  : notificationsEnabled
+                  ? 'Enabled'
+                  : 'Disabled'}
+              </Text>
+              <Text style={styles.chevron}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.sectionDescription}>
+          Tap to open system settings and manage notification permissions.
+        </Text>
 
         <Text style={styles.sectionTitle}>DATA MANAGEMENT</Text>
         <View style={styles.section}>

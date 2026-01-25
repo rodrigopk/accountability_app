@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 
-import { Goal } from '../types/Goal';
+import { Goal, DEFAULT_NOTIFICATION_TIME } from '../types/Goal';
 import { formatFrequency, formatDuration } from '../utils/goalUtils';
 
 import { DurationPicker } from './DurationPicker';
 import { EmojiPickerButton } from './EmojiPickerButton';
 import { FrequencySelector } from './FrequencySelector';
 import { styles } from './GoalCard.styles';
+import { TimePicker } from './TimePicker';
 
 interface GoalCardProps {
   goal: Goal;
@@ -87,6 +88,12 @@ export function GoalCard({ goal, onUpdate, onRemove }: GoalCardProps) {
             onChange={seconds => onUpdate({ durationSeconds: seconds })}
           />
 
+          <Text style={styles.label}>Reminder Time</Text>
+          <TimePicker
+            value={goal.notificationTime || DEFAULT_NOTIFICATION_TIME}
+            onChange={time => onUpdate({ notificationTime: time })}
+          />
+
           <View style={styles.emojiRow}>
             <Text style={styles.label}>Icon</Text>
             <EmojiPickerButton
@@ -118,6 +125,19 @@ export function GoalCard({ goal, onUpdate, onRemove }: GoalCardProps) {
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Duration:</Text>
             <Text style={styles.detailValue}>{formatDuration(goal.durationSeconds)}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Reminder:</Text>
+            <Text style={styles.detailValue}>
+              {(() => {
+                const [h, m] = (goal.notificationTime || DEFAULT_NOTIFICATION_TIME)
+                  .split(':')
+                  .map(Number);
+                const period = h >= 12 ? 'PM' : 'AM';
+                const displayHour = h % 12 || 12;
+                return `${displayHour}:${m.toString().padStart(2, '0')} ${period}`;
+              })()}
+            </Text>
           </View>
         </View>
       )}

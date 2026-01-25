@@ -1,17 +1,30 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { GoalCard } from '../../components/GoalCard';
+import { NotificationWarningBanner } from '../../components/NotificationWarningBanner';
 import { WizardHeader } from '../../components/wizard/WizardHeader';
 import { WizardNextButton } from '../../components/wizard/WizardNextButton';
 import { useWizardNavigation } from '../../navigation/useAppNavigation';
+import { createNotificationProvider } from '../../services/notifications';
 import { useWizardStore } from '../../stores/useWizardStore';
 import { colors, spacing, typography, borderRadius } from '../../theme';
+import { DEFAULT_NOTIFICATION_TIME } from '../../types/Goal';
 
 export function GoalsStepScreen() {
   const { goToWizardStep, goBackWizard } = useWizardNavigation();
   const { goals, addGoal, updateGoal, removeGoal, isStepValid } = useWizardStore();
   const flatListRef = useRef<FlatList>(null);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+
+  useEffect(() => {
+    const checkPermissions = async () => {
+      const provider = createNotificationProvider();
+      const hasPermission = await provider.hasPermission();
+      setNotificationsEnabled(hasPermission);
+    };
+    checkPermissions();
+  }, []);
 
   const handleAddGoal = () => {
     // Get the index of the new goal (current length will be the index after adding)
@@ -22,6 +35,7 @@ export function GoalsStepScreen() {
       description: '',
       frequency: { type: 'daily' },
       durationSeconds: 0,
+      notificationTime: DEFAULT_NOTIFICATION_TIME,
     });
 
     // Scroll to the start of the newly added goal card
@@ -56,6 +70,8 @@ export function GoalsStepScreen() {
         <Text style={styles.description}>
           Add the goals you want to achieve during this accountability round.
         </Text>
+
+        {!notificationsEnabled && <NotificationWarningBanner />}
 
         {goals.length === 0 ? (
           <View style={styles.emptyState}>

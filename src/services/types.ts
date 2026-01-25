@@ -15,6 +15,7 @@ export interface CreateGoalInput {
   emoji?: string;
   frequency: GoalFrequency;
   durationSeconds: number;
+  notificationTime?: string; // Optional, defaults to 09:00
 }
 
 export interface UpdateRoundInput {
@@ -31,6 +32,7 @@ export interface UpdateGoalInput {
   emoji?: string;
   frequency?: GoalFrequency;
   durationSeconds?: number;
+  notificationTime?: string;
 }
 
 export interface LogProgressInput {

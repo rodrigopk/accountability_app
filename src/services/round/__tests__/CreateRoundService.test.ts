@@ -39,6 +39,7 @@ describe('CreateRoundService', () => {
           title: 'Exercise',
           frequency: { type: 'daily' },
           durationSeconds: 3600,
+          notificationTime: '09:00',
         },
         {
           id: 'goal-2',
@@ -46,6 +47,7 @@ describe('CreateRoundService', () => {
           description: 'Daily meditation',
           frequency: { type: 'timesPerWeek', count: 4 },
           durationSeconds: 1800,
+          notificationTime: '09:00',
         },
       ],
       reward: 'Buy a book',

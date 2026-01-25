@@ -11,6 +11,7 @@ describe('RoundDetailGoalCard', () => {
     description: 'Morning workout',
     frequency: { type: 'daily' },
     durationSeconds: 1800,
+    notificationTime: '09:00',
   };
 
   const mockProgressSummary: GoalProgressSummary = {
@@ -37,7 +38,7 @@ describe('RoundDetailGoalCard', () => {
     expect(screen.getByText('Exercise')).toBeTruthy();
   });
 
-  it('displays formatted frequency and duration', () => {
+  it('displays formatted frequency, duration, and notification time', () => {
     render(
       <RoundDetailGoalCard
         goal={mockGoal}
@@ -46,7 +47,7 @@ describe('RoundDetailGoalCard', () => {
         onAmendProgress={jest.fn()}
       />,
     );
-    expect(screen.getByText(/Daily.*30 min/)).toBeTruthy();
+    expect(screen.getByText(/Daily.*30 min.*9:00 AM/)).toBeTruthy();
   });
 
   it('displays emoji avatar with default emoji when not set', () => {

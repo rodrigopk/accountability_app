@@ -31,6 +31,14 @@ export const colors = {
   progressBackground: '#E6F6EE',
   progressFill: '#2BB673',
 
+  // Warning colors for notification banner
+  warningBackground: '#FFF3CD',
+  warningBorder: '#FFECB5',
+  warningText: '#856404',
+
+  // Success color for settings
+  success: '#28A745',
+
   // Transparent
   transparent: 'transparent',
   overlay: 'rgba(0, 0, 0, 0.5)',

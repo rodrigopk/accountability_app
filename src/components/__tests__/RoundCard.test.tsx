@@ -12,8 +12,20 @@ describe('RoundCard', () => {
     startDate: '2026-01-01',
     endDate: '2026-01-31',
     goals: [
-      { id: 'goal-1', title: 'Exercise', frequency: { type: 'daily' }, durationSeconds: 1800 },
-      { id: 'goal-2', title: 'Read', frequency: { type: 'daily' }, durationSeconds: 900 },
+      {
+        id: 'goal-1',
+        title: 'Exercise',
+        frequency: { type: 'daily' },
+        durationSeconds: 1800,
+        notificationTime: '09:00',
+      },
+      {
+        id: 'goal-2',
+        title: 'Read',
+        frequency: { type: 'daily' },
+        durationSeconds: 900,
+        notificationTime: '09:00',
+      },
     ],
     reward: 'Buy new shoes',
     punishment: '',
@@ -92,7 +104,7 @@ describe('RoundCard', () => {
   it('displays goal emoji when present', () => {
     const roundWithEmoji: AccountabilityRound = {
       ...mockRound,
-      goals: [{ ...mockRound.goals[0], emoji: '🏃' }],
+      goals: [{ ...mockRound.goals[0], emoji: '🏃', notificationTime: '09:00' }],
     };
     render(<RoundCard round={roundWithEmoji} progressSummary={null} onPress={mockOnPress} />);
     expect(screen.getByText('🏃')).toBeTruthy();
