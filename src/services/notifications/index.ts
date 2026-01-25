@@ -1,7 +1,8 @@
 export { NotificationService } from './NotificationService';
-export { NotificationProvider } from './NotificationProvider';
-export { RNPushNotificationProvider } from './RNPushNotificationProvider';
 export * from './types';
+
+import { NotificationProvider } from './NotificationProvider';
+import { RNPushNotificationProvider } from './RNPushNotificationProvider';
 
 // Factory for production use
 export function createNotificationProvider(): NotificationProvider {

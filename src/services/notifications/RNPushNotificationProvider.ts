@@ -1,4 +1,4 @@
-import { Platform, Linking, PushNotificationPermissions } from 'react-native';
+import { Platform, Linking, PushNotificationPermissions, PermissionsAndroid } from 'react-native';
 import RNPushNotification, {
   PushNotificationScheduledLocalObject,
 } from 'react-native-push-notification';
@@ -12,15 +12,34 @@ export class RNPushNotificationProvider implements NotificationProvider {
   async initialize(): Promise<boolean> {
     if (this.initialized) return true;
 
+    // Configure without requesting permissions (avoids Firebase initialization on Android)
     RNPushNotification.configure({
       onNotification: notification => {
         // Handle notification tap
         console.log('Notification:', notification);
       },
-      requestPermissions: true,
+      // Don't request permissions here - we'll do it manually to avoid Firebase
+      requestPermissions: false,
     });
 
     this.initialized = true;
+
+    // Request permissions manually for Android 13+
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        );
+        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Notification permission not granted');
+          return false;
+        }
+      } catch (err) {
+        // Permission might not exist on older Android versions, which is fine
+        console.log('Notification permission request error:', err);
+      }
+    }
+
     return this.hasPermission();
   }
 
